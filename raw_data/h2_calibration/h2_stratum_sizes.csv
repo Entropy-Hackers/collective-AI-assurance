@@ -1,0 +1,13 @@
+environment,population,zone,N_z,N_cell
+commons,uniform_fair,clear-specific,132,28795
+commons,uniform_fair,grey,28608,28795
+commons,uniform_fair,clear-none,55,28795
+commons,mixed,clear-specific,217,19499
+commons,mixed,grey,8286,19499
+commons,mixed,clear-none,10996,19499
+triage,uniform_fair,clear-specific,8675,14390
+triage,uniform_fair,grey,5379,14390
+triage,uniform_fair,clear-none,336,14390
+triage,mixed,clear-specific,5311,14405
+triage,mixed,grey,3154,14405
+triage,mixed,clear-none,5940,14405
