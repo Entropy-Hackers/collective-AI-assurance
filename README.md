@@ -42,6 +42,32 @@ this folder from first principles is in `raw_data/`. Both `.tex` files
 are self-contained (embedded bibliography, no external `.bib`) and
 compile standalone with a plain two-pass `pdflatex` run.
 
+**Publication scope for the H2 self-report corpus (per S12, 2026-08-17)**:
+the full corpus of 59,440 agent free-text justifications is published
+*aggregated only* — `h2_per_agent.csv` (classification rates per agent
+per run) and `h2_full_by_cell_v2.csv` (prevalence per cell) — not as
+raw text. All `reason` strings (`events[].params_json.reason`,
+`sanctions[].reason`, `reports[].reason`) in every raw run export under
+`commons/`, `triage/`, `qwen_crossmodel/`, `glm_crossmodel/`,
+`mistral_medium_crossmodel/` have been nulled out accordingly; every
+other field (action, amount, round, agent_id, ts, payoffs, topology)
+is untouched, and every quantitative result in this folder (H1, H3,
+ANOVA, baseline comparison) was re-verified byte-identical after the
+strip. `h2_judge_cache_v2.json` and `h2_judge_by_text.csv` (both full-
+corpus, text-keyed) were removed for the same reason — a fresh run of
+`h2_calibration_analysis.py` in this folder can therefore no longer
+regenerate `h2_judge_by_text.csv` from scratch; the outputs it would
+have produced (`h2_calibration.md`/`.csv`, `h2_adjudicated.csv`) are
+already here as the citable, static result.
+
+The sole, deliberate exception is the 148-item calibration sample in
+`raw_data/h2_calibration/` (`h2_coding_sheet_coder1/2.csv`,
+`h2_adjudication_needed.csv`, `h2_adjudicated.csv`) — published in
+full, including raw text, both blind codings, and the adjudication
+reasoning, because the calibrated prevalence estimate (38.4% [18.8,
+56.5]) rests entirely on this sample and needs to stay independently
+checkable.
+
 ## Status as of this handoff (2026-08-12)
 
 All of the following are **complete, real data, at full replicate
