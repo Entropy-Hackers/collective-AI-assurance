@@ -1,35 +1,27 @@
-# Data and Code
+# Why collective AI assurance cannot target agents or networks in isolation
 
-This repository provides the code and data supporting a study of
-collective fairness in networked populations of autonomous AI agents.
+Companion repository for the study, providing its code and data.
 
-## Research question
+## Abstract
 
-Governance frameworks for artificial intelligence, including the EU AI
-Act, certify the conformity of individual systems; none takes an
-interacting population as its unit. This study tests whether
-individual behavioural compliance is sufficient for collective
-fairness once compliant agents interact through a shared network
-structure.
-
-Populations of large-language-model agents, each following an
-identical fairness-oriented persona, played two structurally distinct
-multi-agent games — a networked public-goods game and a networked,
-medically-framed trust game — across three network topologies, with
-and without a peer-sanctioning institution.
-
-Despite near-uniform individual behaviour, final payoffs correlate
-strongly with network position in hub-dominated topologies, producing
-substantial inequality among agents following textually identical
-instructions. Comparison against non-LLM baseline strategies shows
-part of this inequality is close to mechanically guaranteed by the
-payoff structure itself, but agents' own reciprocity-aware behaviour
-in the trust game produces measurably more inequality than a simple,
-automated reciprocal rule — a genuine behavioural effect, not only a
-structural one. A real peer-sanctioning institution, once actually
-used, correctly identifies the agents responsible for the imbalance
-without correcting it. The core effect replicates across five
-independent model providers and architectures.
+> AI governance increasingly targets coordination between agents
+> rather than agents in isolation, but which feature of an interacting
+> population produces a collective outcome is untested. We varied
+> agent disposition, topology, interaction mechanic, and peer
+> sanctioning factorially across 264 runs of two multi-agent games,
+> with matched non-LLM baselines and four model families. Structural
+> and behavioural causes prove separable: a non-reasoning bot exactly
+> reproduces the public-goods game's degree–payoff relationship, while
+> in the trust game agents generate significantly more degree-linked
+> inequality than a minimal reciprocal rule. Neither prosociality nor
+> awareness prevents unequal outcomes: agents following an identical
+> fairness persona at rates from 84% to 100% produced near-identical
+> structural inequality, and articulating one's own position conferred
+> no payoff advantage. Most consequentially, whether disposition or
+> topology explains the outcome inverts between environments, driven
+> by the mechanic alone. Collective assurance therefore cannot be
+> assigned to a fixed level of the system: its appropriate target
+> depends on the causal structure of the interaction mechanism.
 
 The manuscript and its supplementary information (`manuscript.tex`,
 `supplement.tex`) document the full experimental design, statistical
