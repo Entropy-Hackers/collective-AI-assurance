@@ -34,21 +34,28 @@ the real main study.
 
 | Condition | n | Gini [95% CI] |
 |---|---|---|
-| off (no cue, no power) | 8 | 0.538 [0.481, 0.596]* |
+| off (no cue, no power) | 8 | 0.532 [0.511, 0.553]* |
 | **cue_only** (cue, no power) | 8 | **0.606 [0.549, 0.662]** |
-| on (cue, real power) | 8 | 0.559 [0.497, 0.622]* |
+| on (cue, real power) | 8 | 0.576 [0.537, 0.614]* |
 
 *first 8 replicates of the n=20 off/on data, matched to `cue_only`'s
 n=8 for a fair like-for-like comparison; the full n=20 numbers are in
-`variance_and_h3_results.md`.
+`variance_and_h3_results.md`. **Corrected 2026-08-19**: the previous
+version of this table (off 0.538, on 0.559) selected "first 8" by
+alphabetical string sort (`rep1, rep10, rep11, ...`) instead of
+numeric replicate order -- the same bug class as the ANOVA rep-sort
+fix in `stats_main_study.py`, but this table was computed ad hoc and
+missed it. Recomputed with `rep.json` files sorted numerically; the
+`cue_only` row is unaffected (only 8 replicates exist, no selection
+involved) and matches exactly.
 
 Bootstrap CI on the deltas (10,000 resamples, same method as H3's own
 equivalence test):
 
 | Comparison | delta Gini | 95% CI | Excludes zero? |
 |---|---|---|---|
-| cue_only - off | +0.081 | [+0.011, +0.145] | **yes** |
-| on - cue_only  | -0.044 | [-0.106, +0.021] | no |
+| cue_only - off | +0.073 | [+0.015, +0.127] | **yes** |
+| on - cue_only  | -0.030 | [-0.091, +0.036] | no |
 
 **The cue alone reproduces the full effect.** cue_only is
 significantly higher than off (real, non-zero increase from the cue
