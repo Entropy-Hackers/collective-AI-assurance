@@ -68,40 +68,44 @@ from zero within a pre-specified practical-equivalence margin of
 +/-0.05. The other 10 cells (per environment) are descriptive only,
 same asymmetric scope H1 itself uses.
 
-| Env | Population | Topology | Confirmatory | delta Gini | 95% CI | Equivalent? |
-|---|---|---|---|---|---|---|
-| Commons | uniform_fair | scale_free | **yes** | +0.0435 | [+0.0044, +0.0857] | **NO** |
-| Triage  | uniform_fair | scale_free | **yes** | -0.0029 | [-0.0486, +0.0425] | yes |
+| Env | Population | Topology | Confirmatory | n off/on | delta Gini | 95% CI | Equivalent? |
+|---|---|---|---|---|---|---|---|
+| Commons | uniform_fair | scale_free | **yes** | 20/20 | +0.0460 | [+0.0124, +0.0791] | **NO** |
+| Triage  | uniform_fair | scale_free | **yes** | 8/8 | -0.0029 | [-0.0486, +0.0425] | yes |
 
 **H3 is only confirmed in one of its two confirmatory cells.** In
-triage/uniform_fair/scale_free the CI sits entirely inside +/-0.05 --
-clean equivalence, matches the pinned claim. In
-commons/uniform_fair/scale_free, the CI is [+0.0044, +0.0857]: it
-excludes zero (there is a real, detectable, small *increase* in Gini
-with sanctioning on) and its upper bound exceeds the +/-0.05 margin --
-so this cell is neither "equivalent to zero" nor "a clearly large
+triage/uniform_fair/scale_free (n=8) the CI sits entirely inside
++/-0.05 -- clean equivalence, matches the pinned claim. In
+commons/uniform_fair/scale_free (n=20 -- extended from the original
+n=8 specifically to check this boundary case, see "Resolution after
+extra replicates" below), the CI is [+0.0124, +0.0791]: it excludes
+zero (there is a real, detectable, small *increase* in Gini with
+sanctioning on) and its upper bound exceeds the +/-0.05 margin -- so
+this cell is neither "equivalent to zero" nor "a clearly large
 effect," it's a real, modest, statistically non-zero increase that the
-pre-specified margin doesn't resolve either way. This is not a bug in
-the test; it's what the 8-replicate data actually show.
+pre-specified margin doesn't resolve either way. More data narrowed
+the CI (was [+0.0044, +0.0857] at n=8) without changing that
+conclusion -- this is not a small-sample artifact.
 
 **Implication for the paper's H3 as currently pinned:** the claim needs
 either (a) narrowing to triage only (drop the "even in
-scale-free/uniform-fair" framing that implied both), (b) more
-replicates specifically for commons/uniform_fair/scale_free to see if
-the CI narrows and clarifies which side of the margin it lands on, or
-(c) reframing H3 as environment-conditional from the start, consistent
-with how the topology finding itself turned out to be
-environment-dependent. Descriptive cells (below, not part of the
-confirmatory claim) mostly land inside the margin or close to it,
-except commons/uniform_fair/clustered (CI [+0.003, +0.099], also
-excludes zero on the low side and also exceeds the margin on the high
-side) -- worth noting since it's the *same* population/environment
-pairing as the one confirmatory failure, suggesting this might be a
-commons/uniform_fair pattern rather than a scale_free-specific one.
+scale-free/uniform-fair" framing that implied both), or (b) reframing
+H3 as environment-conditional from the start, consistent with how the
+topology finding itself turned out to be environment-dependent.
+(Running more replicates specifically for this cell was already tried
+-- see "Resolution after extra replicates" below -- and narrowed the
+CI without resolving which side of the margin it lands on, so that
+option is exhausted, not still open.) Descriptive cells (below, not
+part of the confirmatory claim) all land inside the margin at current
+replicate counts, including commons/uniform_fair/clustered (n=20:
++0.0101 [-0.0238, +0.0463], equivalent) -- at n=8 this cell had also
+excluded zero and exceeded the margin, the same pattern as the
+confirmatory cell, but resolved to clean equivalence once extended;
+the confirmatory cell did not.
 
-Full 12-row table (all cells, both environments) in
-`tools/reports/raw_exports/h3_equivalence_full.md` (regenerable via
-`python3 stats_main_study.py h3`).
+Full 12-row table (all cells, both environments, current replicate
+counts) in `tools/reports/raw_exports/h3_equivalence_full.md`
+(regenerable via `python3 stats_main_study.py h3`).
 
 ## Resolution after extra replicates (n=8 -> n=20, 2026-08-12)
 

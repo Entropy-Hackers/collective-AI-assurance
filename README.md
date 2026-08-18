@@ -43,6 +43,12 @@ data and code for independent verification.
 - `baseline_comparison.md` — comparison against non-LLM baseline
   strategies, run through the same experimental harness and design as
   the main study.
+- `h2_results.md` / `h2_by_cell.md` — an earlier, superseded H2
+  classification pass (46,157 texts, the original 192-run study only);
+  kept for provenance. The current H2 results (59,440 texts, including
+  later replicates and a corrected classifier prompt) are
+  `raw_data/h2_full_results_v2.md` and `raw_data/h2_full_by_cell_v2.csv`
+  — use those, not the top-level files.
 - `raw_data/` — full underlying data and analysis code (see below).
 
 ## Data availability
