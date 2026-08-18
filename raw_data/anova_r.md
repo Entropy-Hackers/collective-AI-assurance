@@ -8,33 +8,36 @@ mixed-effects model: the `(1|seed)` random effect is the within-cell
 residual here, not a fitted variance component. Fit separately per
 environment, matching the manuscript's stated analysis model.
 
+Percentile bootstrap CI (95%, 10000 resamples, replicates
+resampled with replacement within each cell) on every percentage below.
+
 ## commons
 
 n = 8/cell, grand mean = 0.5724, SS total = 11.8006
 
-| Source | % variance |
+| Source | % variance [95% CI] |
 |---|---|
-| population (alignment) | 85.5% |
-| topology | 2.6% |
-| sanctioning (institution) | 0.0% |
-| population x topology | 2.1% |
-| population x sanctioning | 0.0% |
-| topology x sanctioning | 0.0% |
-| three-way interaction | 0.0% |
-| residual (within-cell, ~ (1\|seed)) | 9.7% |
+| population (alignment) | 85.5% [80.0, 91.2] |
+| topology | 2.6% [0.8, 5.4] |
+| sanctioning (institution) | 0.0% [0.0, 0.9] |
+| population x topology | 2.1% [0.5, 4.6] |
+| population x sanctioning | 0.0% [0.0, 1.0] |
+| topology x sanctioning | 0.0% [0.0, 0.9] |
+| three-way interaction | 0.0% [0.0, 0.9] |
+| residual (within-cell, ~ (1\|seed)) | 9.7% [5.1, 12.3] |
 
 ## triage
 
 n = 8/cell, grand mean = 0.5950, SS total = 5.4875
 
-| Source | % variance |
+| Source | % variance [95% CI] |
 |---|---|
-| population (alignment) | 9.8% |
-| topology | 55.7% |
-| sanctioning (institution) | 0.4% |
-| population x topology | 3.3% |
-| population x sanctioning | 0.3% |
-| topology x sanctioning | 1.6% |
-| three-way interaction | 0.0% |
-| residual (within-cell, ~ (1\|seed)) | 28.8% |
+| population (alignment) | 9.8% [3.4, 20.0] |
+| topology | 55.7% [45.0, 67.4] |
+| sanctioning (institution) | 0.4% [0.0, 3.4] |
+| population x topology | 3.3% [0.3, 10.5] |
+| population x sanctioning | 0.3% [0.0, 3.8] |
+| topology x sanctioning | 1.6% [0.0, 6.2] |
+| three-way interaction | 0.0% [0.0, 2.5] |
+| residual (within-cell, ~ (1\|seed)) | 28.8% [16.7, 34.0] |
 

@@ -50,6 +50,7 @@ import csv
 import json
 import random
 import statistics
+import zlib
 from pathlib import Path
 
 from analyze_main_study import (
@@ -238,6 +239,52 @@ def balanced_anova(rows: list[dict], environment: str, metric: str) -> dict:
     }
 
 
+PCT_KEYS = ["population_pct", "topology_pct", "sanctioning_pct", "population_x_topology_pct",
+            "population_x_sanctioning_pct", "topology_x_sanctioning_pct", "three_way_pct", "residual_pct"]
+
+
+def bootstrap_anova_ci(rows: list[dict], environment: str, metric: str, n_boot: int = N_BOOT,
+                       ci_level: float = CI_LEVEL, seed: int = 1) -> dict:
+    """Percentile-bootstrap CI on each variance-decomposition percentage
+    from balanced_anova(). Resamples replicates with replacement
+    *within each cell* (the design's own resampling unit -- population,
+    topology and sanctioning are fixed factors, not resampled), rebuilds
+    a synthetic row set of the same balanced shape, and reruns the exact
+    same closed-form decomposition per draw -- no separate CI math, so
+    it can't drift from the point estimate's own computation."""
+    data = [r for r in rows if r["environment"] == environment and r[metric] is not None]
+    by_cell: dict[tuple, list[float]] = {}
+    for r in data:
+        key = (r["population"], r["topology"], r["sanctioning"])
+        by_cell.setdefault(key, []).append(r[metric])
+
+    observed = balanced_anova(rows, environment, metric)
+    rng = random.Random(seed)
+    draws = {k: [] for k in PCT_KEYS}
+    for _ in range(n_boot):
+        resampled_rows = []
+        for (population, topology, sanctioning), vals in by_cell.items():
+            for v in (rng.choice(vals) for _ in vals):
+                resampled_rows.append({"environment": environment, "population": population,
+                                       "topology": topology, "sanctioning": sanctioning, metric: v})
+        try:
+            res = balanced_anova(resampled_rows, environment, metric)
+        except ZeroDivisionError:
+            continue  # a degenerate resample with ss_total == 0; pct() already guards this, kept for safety
+        for k in PCT_KEYS:
+            draws[k].append(res[k])
+
+    alpha = 1 - ci_level
+    cis = {}
+    for k in PCT_KEYS:
+        vals = sorted(draws[k])
+        nb = len(vals)
+        lo_idx = int((alpha / 2) * nb)
+        hi_idx = int((1 - alpha / 2) * nb) - 1
+        cis[k] = (vals[lo_idx], vals[hi_idx])
+    return {"observed": observed, "ci": cis, "n_boot": n_boot, "ci_level": ci_level}
+
+
 # ------------------------------------------------------------- (3) ---
 
 def bootstrap_delta_ci(off_vals: list[float], on_vals: list[float], n_boot: int = N_BOOT,
@@ -366,24 +413,34 @@ def main() -> int:
                 "manuscript's `outcome ~ alignment * topology * institution + (1|seed)`",
                 "mixed-effects model: the `(1|seed)` random effect is the within-cell",
                 "residual here, not a fitted variance component. Fit separately per",
-                "environment, matching the manuscript's stated analysis model.", ""]
+                "environment, matching the manuscript's stated analysis model.", "",
+                f"Percentile bootstrap CI ({int(CI_LEVEL*100)}%, {N_BOOT} resamples, replicates",
+                "resampled with replacement within each cell) on every percentage below.", ""]
         for environment in ENVIRONMENTS:
             res = balanced_anova(rows, environment, args.metric)
+            seed = zlib.crc32(f"anova|{environment}|{args.metric}".encode())
+            boot = bootstrap_anova_ci(rows, environment, args.metric, seed=seed)
+            ci = boot["ci"]
+
+            def fmt(key: str) -> str:
+                lo, hi = ci[key]
+                return f"{res[key]:.1f}% [{lo:.1f}, {hi:.1f}]"
+
             lines.append(f"## {environment}")
             lines.append("")
             lines.append(f"n = {res['n_per_cell']}/cell, grand mean = {res['grand_mean']:.4f}, "
                          f"SS total = {res['ss_total']:.4f}")
             lines.append("")
-            lines.append("| Source | % variance |")
+            lines.append(f"| Source | % variance [{int(CI_LEVEL*100)}% CI] |")
             lines.append("|---|---|")
-            lines.append(f"| population (alignment) | {res['population_pct']:.1f}% |")
-            lines.append(f"| topology | {res['topology_pct']:.1f}% |")
-            lines.append(f"| sanctioning (institution) | {res['sanctioning_pct']:.1f}% |")
-            lines.append(f"| population x topology | {res['population_x_topology_pct']:.1f}% |")
-            lines.append(f"| population x sanctioning | {res['population_x_sanctioning_pct']:.1f}% |")
-            lines.append(f"| topology x sanctioning | {res['topology_x_sanctioning_pct']:.1f}% |")
-            lines.append(f"| three-way interaction | {res['three_way_pct']:.1f}% |")
-            lines.append(f"| residual (within-cell, ~ (1\\|seed)) | {res['residual_pct']:.1f}% |")
+            lines.append(f"| population (alignment) | {fmt('population_pct')} |")
+            lines.append(f"| topology | {fmt('topology_pct')} |")
+            lines.append(f"| sanctioning (institution) | {fmt('sanctioning_pct')} |")
+            lines.append(f"| population x topology | {fmt('population_x_topology_pct')} |")
+            lines.append(f"| population x sanctioning | {fmt('population_x_sanctioning_pct')} |")
+            lines.append(f"| topology x sanctioning | {fmt('topology_x_sanctioning_pct')} |")
+            lines.append(f"| three-way interaction | {fmt('three_way_pct')} |")
+            lines.append(f"| residual (within-cell, ~ (1\\|seed)) | {fmt('residual_pct')} |")
             lines.append("")
         Path(args.out).write_text("\n".join(lines) + "\n")
         print(f"written {args.out}")

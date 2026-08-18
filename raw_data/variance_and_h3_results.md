@@ -36,6 +36,12 @@ On Gini (all 3 topology levels, full 2x3x2 design):
 | Commons | 10.5% | 19.3% | 0.1% | 41.3% | 26.6% |
 | Triage  | 35.9% | 32.9% | 0.4% | 2.7% | 26.9% |
 
+Point estimates only, for a compact overview. Full 95% percentile
+bootstrap CI (10,000 resamples, replicates resampled with replacement
+within each cell) on every one of these values -- including the
+interaction and residual terms omitted from the compact tables above
+-- is in `anova_r.md` / `anova_gini.md`, not duplicated here.
+
 Two things worth flagging before this goes anywhere near the paper:
 
 1. **The r-based and Gini-based decompositions tell different
