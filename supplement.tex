@@ -1,3 +1,13 @@
+%%=====================================================================
+%%  manuscript_v3_supplement.tex --- Supplementary Information for
+%%  manuscript_v3.tex. Revision of manuscript_v2_supplement.tex; the
+%%  substantive changes are recorded in the % REVISION V3 log at the
+%%  end of manuscript_v3.tex. Section, table and figure numbers now
+%%  carry the S-prefix automatically (S1..S12, Table S1..S5, Figure
+%%  S1), so cross-references from the main text resolve to the printed
+%%  numbers.
+%%=====================================================================
+
 \documentclass[11pt,a4paper]{article}
 
 \usepackage[T1]{fontenc}
@@ -9,31 +19,46 @@
 \usepackage{fancyvrb}
 \usepackage{enumitem}
 \usepackage{graphicx}
+\usepackage{doi}
 
 \geometry{margin=2.5cm}
+\setlength{\emergencystretch}{1em}
 
 \newcommand{\code}[1]{\texttt{#1}}
 
-\title{\bfseries Supplementary Information\\
-\large Individual compliance does not guarantee collective fairness:
-structural inequality in networked populations of autonomous LLM
-agents}
+%% S-prefixed automatic numbering for sections, tables and figures.
+\renewcommand{\thesection}{S\arabic{section}}
+\renewcommand{\thesubsection}{\thesection.\arabic{subsection}}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
 
-\author{Anonymous Author(s)}
+\title{\bfseries Supplementary Information\\
+\large Why collective AI assurance cannot target agents or networks in
+isolation}
+
+\author{Heimo M\"uller$^{1,2}$ \and Markus Plass$^{1}$ \and
+Andreas Holzinger$^{1,3,4}$}
 \date{}
 
 \begin{document}
 \maketitle
+
+\noindent\textit{$^{1}$Medical University of Graz, Graz, Austria.
+$^{2}$Human-Mind-Machine Corporation, Graz, Austria.
+$^{3}$BOKU University Vienna, Vienna, Austria.
+$^{4}$Graz University of Technology, Graz, Austria.}
+\vspace{1em}
 
 This document accompanies the main text with implementation detail
 sufficient for independent reproduction: full persona and round-prompt
 text, tool schemas, non-LLM baseline strategy definitions, the H2
 classification pipeline, topology generation, and the model/API
 configuration for every backend tested. Code and exported round-level
-data are released alongside submission (Section~S8).
+data are released alongside submission (Section~S12).
 
 %%=====================================================================
-\section{S1. Agent personas (``SOUL'' text)}
+\section{Agent personas (``SOUL'' text)}
+\label{sec:s1}
 %%=====================================================================
 
 Each agent is instantiated with exactly one persona, fixed for the
@@ -43,7 +68,7 @@ population condition assigns every agent the fair persona; the
 \emph{mixed} population condition assigns personas in a fixed
 round-robin across the three.
 
-\subsection{S1.1 Public-goods environment (``commons'')}
+\subsection{Public-goods environment (``commons'')}
 
 \begin{Verbatim}[fontsize=\small,frame=single,framesep=6pt]
 [fair]
@@ -74,7 +99,7 @@ judgment, based on what you see in `society_get_state`.
 (Preamble identical to [fair], tool list identical.)
 \end{Verbatim}
 
-\subsection{S1.2 Trust-game environment (``triage'')}
+\subsection{Trust-game environment (``triage'')}
 
 \begin{Verbatim}[fontsize=\small,frame=single,framesep=6pt]
 [fair]
@@ -111,7 +136,8 @@ your own patient -- by your own judgment, based on what you see in
 \end{Verbatim}
 
 %%=====================================================================
-\section{S2. Round prompts}
+\section{Round prompts}
+\label{sec:s2}
 %%=====================================================================
 
 Round 1 is preceded by a longer tutorial message; every subsequent
@@ -149,7 +175,7 @@ last round's outcome, then call exactly one of society_triage_send
 and a one-line `reason`.
 \end{Verbatim}
 
-\subsection{S2.1 Sanctioning cue}
+\subsection{Sanctioning cue}
 
 When the sanctioning institution is active, the following clause is
 appended to every round message (tutorial and reminder alike) from
@@ -169,7 +195,8 @@ extracting... a colleague who has been repeatedly extracting far more
 than a fair share without contributing.'')
 
 %%=====================================================================
-\section{S3. Tool schema}
+\section{Tool schema}
+\label{sec:s3}
 %%=====================================================================
 
 Standard OpenAI-compatible function-calling schema (\code{tools} +
@@ -205,13 +232,20 @@ society_sanction
 \end{Verbatim}
 
 Per round, an agent's turn ends as soon as it has successfully called
-one of the environment's action tools (contribute/extract, or
-send/keep) -- this is enforced by the experiment harness itself,
-rather than left to each model's own judgement about when a turn is
-complete.
+one action tool -- this is enforced by the harness rather than left to
+each model's judgement about when a turn is complete. The
+turn-ending action tools are contribute/extract (commons) and
+send/keep (triage); when the sanctioning institution is active,
+\code{society\_sanction} is also turn-ending, so an agent that
+sanctions makes no resource allocation that round. Such rounds are
+recorded with action \code{neither} and yield no payoff from the
+agent's own endowment, though incoming transfers are still received.
+\code{society\_get\_state} and \code{society\_report} are not
+turn-ending.
 
 %%=====================================================================
-\section{S4. Non-LLM baseline strategies}
+\section{Non-LLM baseline strategies}
+\label{sec:s4}
 %%=====================================================================
 
 Run through the identical game mechanic and network topologies as the
@@ -219,7 +253,7 @@ LLM conditions, to separate what inequality is close to mechanically
 guaranteed by the payoff structure from what is attributable to
 genuine LLM agent behaviour.
 
-\subsection{S4.1 Commons}
+\subsection{Commons}
 
 \begin{itemize}[leftmargin=1.5em]
   \item \textbf{Fixed}: contribute a constant amount every round,
@@ -229,7 +263,7 @@ genuine LLM agent behaviour.
   from a fixed range.
 \end{itemize}
 
-\subsection{S4.2 Trust game}
+\subsection{Trust game}
 
 \begin{itemize}[leftmargin=1.5em]
   \item \textbf{Fixed}: round-robin through one's visible neighbours
@@ -248,13 +282,18 @@ genuine LLM agent behaviour.
 \end{itemize}
 
 %%=====================================================================
-\section{S5. H2 classification pipeline}
+\section{H2 classification pipeline}
+\label{sec:s5}
 %%=====================================================================
 
 Every action call includes a short free-text \code{reason} argument.
-For each such record (rounds $\geq 1$, i.e. after \code{last\_round}
-feedback was available to the agent), two independent binary
-dimensions are classified:
+Every such record is classified, with no round-based filter: the
+first round carries no \code{last\_round} feedback and is included
+regardless. Across the 264-run dataset this gives a ceiling of
+$264 \times 20 \times 15 = 79{,}200$ agent-rounds, of which 75,822
+carry a recorded justification (agents that do not act, or act without
+supplying a reason, contribute none), deduplicating to 59,440 unique
+texts. Two independent binary dimensions are classified:
 
 \begin{itemize}[leftmargin=1.5em]
   \item \textbf{Awareness}: does the text reference the agent's own
@@ -288,14 +327,75 @@ toward ``contains any justification'' rather than the intended,
 narrower ``references a specific structural/relational fact''). The
 coding instructions were revised to include one explicit positive and
 one explicit negative worked example, and the pass repeated. The
-revised human coding reached substantial agreement (Landis \& Koch)
-against both automated classifiers on both dimensions
-($\kappa=0.66$--$0.79$), after which the LLM judge was adopted as the
+revised human coding reached substantial agreement against both
+automated classifiers on both dimensions ($\kappa=0.66$--$0.79$), in
+the sense of the benchmark of Landis and Koch [S1], after which the
+LLM judge was adopted as the
 primary H2 metric, with the keyword classifier retained only as a
 free, instant secondary check.
 
+\subsection{Calibration sample and prevalence estimates}
+
+The awareness-prevalence figures quoted in Section~4.3 of the main
+text rest on two instruments. First, a stratified calibration sample
+of 148 items was drawn and coded by two blind human coders, with
+disagreements resolved by third-party adjudication; the calibrated
+prevalence of position-referring justifications is 38.4\%
+[18.8, 56.5] in the uniform-fair trust game against 0.0\% [0.0, 0.0]
+in the public-goods game. All 148 items, both coders' item-level
+assignments and the adjudicated resolutions are released verbatim
+(Section~S12). Second, the LLM judge described above, applied to the
+full justification corpus with a broader criterion, reproduces the
+same environment contrast at 68.9--81.4\% (trust game) against
+0.1--0.2\% (public-goods game).
+The per-cell rates underlying both ranges are given in
+Table~\ref{tab:h2cells}.
+
+\begin{table}[htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\caption{LLM-judge classification rates per cell, full 264-run
+corpus. ``Texts'' counts recorded justifications in the cell before
+global deduplication (75,822 in total, 59,440 unique). ``Aware'' is
+the awareness dimension, ``Fair'' the fairness/trust-assertion
+dimension.}
+\label{tab:h2cells}
+\begin{tabular}{lllcrcc}
+\toprule
+Environment & Population & Topology & Sanc. & Texts & Aware & Fair \\
+\midrule
+Public goods & uniform-fair & full & off & 2,399 & 0.2\% & 100.0\% \\
+Public goods & uniform-fair & full & on & 2,400 & 0.2\% & 100.0\% \\
+Public goods & uniform-fair & clust. & off & 5,998 & 0.2\% & 100.0\% \\
+Public goods & uniform-fair & clust. & on & 6,000 & 0.2\% & 100.0\% \\
+Public goods & uniform-fair & s.-free & off & 6,000 & 0.1\% & 100.0\% \\
+Public goods & uniform-fair & s.-free & on & 5,997 & 0.1\% & 100.0\% \\
+Public goods & mixed & full & off & 2,154 & 7.1\% & 53.6\% \\
+Public goods & mixed & full & on & 2,063 & 6.4\% & 52.4\% \\
+Public goods & mixed & clust. & off & 5,382 & 9.2\% & 51.9\% \\
+Public goods & mixed & clust. & on & 4,647 & 8.0\% & 49.8\% \\
+Public goods & mixed & s.-free & off & 2,111 & 9.2\% & 49.2\% \\
+Public goods & mixed & s.-free & on & 1,945 & 8.3\% & 49.8\% \\
+Trust game & uniform-fair & full & off & 2,396 & 68.9\% & 88.5\% \\
+Trust game & uniform-fair & full & on & 2,397 & 72.2\% & 87.2\% \\
+Trust game & uniform-fair & clust. & off & 2,395 & 75.8\% & 91.8\% \\
+Trust game & uniform-fair & clust. & on & 2,394 & 78.6\% & 91.3\% \\
+Trust game & uniform-fair & s.-free & off & 2,398 & 75.4\% & 88.5\% \\
+Trust game & uniform-fair & s.-free & on & 2,378 & 81.4\% & 88.4\% \\
+Trust game & mixed & full & off & 2,399 & 54.1\% & 48.1\% \\
+Trust game & mixed & full & on & 2,399 & 54.8\% & 48.1\% \\
+Trust game & mixed & clust. & off & 2,398 & 54.5\% & 49.6\% \\
+Trust game & mixed & clust. & on & 2,394 & 55.3\% & 50.0\% \\
+Trust game & mixed & s.-free & off & 2,400 & 52.8\% & 48.0\% \\
+Trust game & mixed & s.-free & on & 2,378 & 55.0\% & 47.1\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
 %%=====================================================================
-\section{S6. Network topology generation}
+\section{Network topology generation}
+\label{sec:s6}
 %%=====================================================================
 
 All topologies are generated with a seeded pseudo-random generator
@@ -309,11 +409,13 @@ conditions where applicable) over $n=20$ agent identities.
   \item \textbf{Clustered}: agents are partitioned into 4 equal-sized
   clusters (striding the agent-id list, \texttt{agent\_ids[i::4]}),
   each cluster internally fully-connected, plus 40 inter-cluster
-  bridge edges. This bridge count is chosen to bring clustered
-  topology's degree variance (standard deviation of degree
-  $\approx 1.7$) up to a level comparable with scale-free's, so the
-  degree--payoff correlation is measurable in both conditions rather
-  than being attenuated by near-zero degree variance in one of them.
+  bridge edges. This bridge count was raised from an initial default
+  of 3 after a pilot-stage parameter sweep showed the low default gave
+  too little degree variance to correlate reliably; at 40 bridges,
+  clustered topology's degree variance (standard deviation of degree
+  $\approx 1.7$) is close to scale-free's ($\approx 2.2$; main study,
+  $n=20$), bringing the degree--payoff correlation into a comparably
+  measurable range in both conditions.
   \item \textbf{Scale-free}: generated by a preferential-attachment
   process (each new node connects to $m=2$ existing nodes, with
   attachment probability proportional to existing degree), producing
@@ -321,68 +423,464 @@ conditions where applicable) over $n=20$ agent identities.
   structural advantage is expected to be most visible.
 \end{itemize}
 
-Figure~1 of the main text shows the clustered-topology referral pattern
-for a single trust-game replicate; Figure~S1 below shows the
-scale-free equivalent from the same replicate index, for direct
-visual contrast. Unlike the clustered condition, there is no group
-structure to partition edges by; instead, the two highest-degree hub
-nodes (out of 20 agents) are party to 45\% of all referrals in this
-replicate, a disproportionate share of interaction volume relative to
-their 10\% share of the population.
+Figure~2 of the main text shows referral dynamics for a representative
+uniform-fair trust-game run in each non-null topology. Its panels show
+referrals occurring \emph{within} each window rather than
+cumulatively, so that change between windows is visible: a cumulative
+rendering makes successive panels near-indistinguishable regardless of
+whether the underlying pattern is stable, which is why the incremental
+convention is used.
+
+Beyond the stabilization rates given there, the two topologies also
+differ in concentration: in scale-free, the two highest-degree hub
+nodes (10\% of the population) are party to 45\% of all referrals,
+against 17.7--21.6\% for the two highest-degree agents in clustered
+runs. Both quantities point the same way --- clustered runs neither
+concentrate referrals on high-degree agents to the same extent, nor
+settle into a stable pattern --- and together they offer a candidate
+mechanism for the weaker degree--payoff correlation there ($r=0.337$
+vs.\ $0.967$; main text, Sections~4.1 and~5).
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{figures/interaction_timeline_scalefree.pdf}
-\caption{Cumulative referral pattern in the trust game over the course
-of a single scale-free-topology run (edge width proportional to the
-number of times a dyad has exchanged up to that round; node size
-proportional to degree). The two highest-degree hubs are party to 45\%
-of all referrals in this replicate.}
-\label{fig:temporal-scalefree}
+\includegraphics[width=\textwidth]{figures/degree_payoff_scatter.pdf}
+\caption{Network degree against cumulative net payoff, uniform-fair
+population, sanctioning off; one point per agent, pooled across runs
+(public-goods cells: 400 agents over 20 runs; trust-game cells: 160
+over 8). Red line is the least-squares fit through the pooled cloud,
+shown for orientation only --- the correlations reported in the main
+text are means of within-run correlations (main text,
+Section~3.4), not fits to this pooled scatter. The three left panels
+show the near-deterministic degree--payoff relationship; the rightmost
+is the clustered trust-game condition, where degree still predicts
+payoff but far more loosely.}
+\label{fig:scatter}
 \end{figure}
 
 %%=====================================================================
-\section{S7. Models and API configuration}
+\section{Models and API configuration}
+\label{sec:s7}
 %%=====================================================================
 
-All five models were run through the identical harness, prompts, and
-game code described above; only the API endpoint and model identifier
-differ.
+All models were run through the identical harness, prompts and game
+code described above; only the API endpoint and model identifier
+differ. DeepSeek carries the full factorial main study; the other
+three were run on the confirmatory cell only (uniform-fair $\times$
+scale-free, sanctioning off, both environments) at 8 runs each, the
+same replicate standard as the main study.
 
 \begin{table}[ht]
 \centering
 \small
-\begin{tabular}{lll}
+\caption{Model backends, endpoints, experimental scope and run dates.}
+\label{tab:models}
+\begin{tabular}{lllcc}
 \toprule
-Model & Access & Notes \\
+Model identifier & Provider / endpoint & Scope & Runs & Run date \\
 \midrule
-DeepSeek (\code{deepseek-v4-flash}) & Hosted API (primary) & Native function-calling \\
-GPT-4o & Hosted gateway & Native function-calling \\
-GLM-5.2 & Hosted API & Native function-calling \\
-Qwen (open-weight) & Self-hosted + third-party hosted & Native function-calling \\
-Mistral-Large-3 & Hosted gateway & Native function-calling \\
+\code{deepseek-v4-flash} & e-INFRA CZ gateway & Full factorial main study & 264 & 2026-08-10/11 \\
+\code{glm-5.2} & e-INFRA CZ gateway & Confirmatory cell & 16 & 2026-08-12 \\
+\code{mistral-medium-3.5} & e-INFRA CZ gateway & Confirmatory cell & 16 & 2026-08-12 \\
+\code{qwen3.5-122b} & e-INFRA CZ gateway & Confirmatory cell & 16 & 2026-08-12 \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Two models tested at smoke-test scale only, not included in the
-five-model comparison in the main text, showed environment-specific
-issues unrelated to the harness itself and are not analysed further
-here: one produced agents that predominantly checked state without
-taking a game action; a full batch for another was separately
-invalidated by an API-provider-side usage limit unrelated to model
-behaviour.
+\paragraph{Sampling configuration.} No sampling parameters were set
+anywhere in the harness. The request body sent to the
+OpenAI-compatible \code{/chat/completions} endpoint contains only
+\code{model}, \code{messages}, \code{tools} and
+\code{tool\_choice="auto"}; \code{temperature}, \code{top\_p},
+\code{seed} and any reasoning- or thinking-mode flag are all absent,
+so every backend ran at its own provider-side defaults. This was a
+deliberate harness decision rather than an oversight: reasoning-mode
+models on the gateway reject \code{temperature} outright unless a
+reasoning-effort field is set alongside it, and rather than special-case
+each backend's constraints the harness sets none. Sampling is
+therefore uncontrolled across backends, which makes the cross-model
+agreement in Section~S11 a comparison of model families under their
+own default decoding rather than under matched decoding. Within the
+main study a single backend and a single configuration are used
+throughout, so no comparison in the main text is confounded by it. A
+per-turn cap of six tool-call iterations guards against runaway
+tool-call loops; rate-limit failures are retried up to five times with
+exponential backoff from a 10-second base.
+
+All four models expose native function-calling and none required
+prompt adaptation: personas, round prompts and tool schemas were
+byte-identical across backends. Two further backends were attempted
+and contribute no data to any reported result: GPT-4o was
+discontinued after smoke-test scale, and a Mistral-Large-3 scale-up
+was blocked by a provider-side gateway restriction on the host used
+for these runs, unrelated to model behaviour. No cell mixes backends.
 
 %%=====================================================================
-\section{S8. Data and code availability}
+\section{Non-LLM baseline comparison, all cells}
+\label{sec:s8}
 %%=====================================================================
 
-Code (game server, experiment orchestration, analysis scripts) and
-exported round-level data for every reported condition are released
-in the project repository alongside submission. Non-LLM baseline
-simulations, the H2 classification pipeline, and topology generation
-are pure-stdlib Python with no external dependencies, runnable
-without API access for full reproducibility of the mechanically-
-guaranteed component of the results.
+Table~\ref{tab:baseline} gives the full permutation-test comparison
+summarised in Section~4.2 of the main text: real uniform-fair LLM runs
+against each non-LLM strategy, matched by environment, topology and
+sanctioning arm, on mean within-run degree--payoff $r$. Fully-connected
+cells are omitted ($r$ undefined).
+
+\begin{table}[htbp]
+\centering
+\small
+\caption{Real uniform-fair LLM agents versus non-LLM baseline
+strategies. Two-sided permutation test, 10,000 shuffles. The baseline
+arm has 8 runs per cell throughout; the real arm uses all available
+runs, which is 8 except in the four extended public-goods cells, where
+it is 20.}
+\label{tab:baseline}
+\begin{tabular}{lllccc}
+\toprule
+Environment & Topology & Sanc. & Baseline & Real $r$ / baseline $r$ & $p$ \\
+\midrule
+Public goods & scale-free & off & fixed      & 0.973 / 0.982 & 0.094 \\
+Public goods & scale-free & off & random     & 0.973 / 0.808 & $<$0.001 \\
+Public goods & scale-free & on  & fixed      & 0.983 / 0.986 & 0.576 \\
+Public goods & scale-free & on  & random     & 0.983 / 0.813 & $<$0.001 \\
+Public goods & clustered  & off & fixed      & 0.962 / 0.960 & 0.767 \\
+Public goods & clustered  & off & random     & 0.962 / 0.205 & $<$0.001 \\
+Public goods & clustered  & on  & fixed      & 0.970 / 0.960 & 0.140 \\
+Public goods & clustered  & on  & random     & 0.970 / 0.205 & $<$0.001 \\
+\midrule
+Trust game & scale-free & off & fixed      & 0.967 / 0.982 & 0.014 \\
+Trust game & scale-free & off & random     & 0.967 / 0.850 & $<$0.001 \\
+Trust game & scale-free & off & reciprocal & 0.967 / 0.671 & $<$0.001 \\
+Trust game & scale-free & on  & fixed      & 0.950 / 0.983 & 0.003 \\
+Trust game & scale-free & on  & random     & 0.950 / 0.818 & 0.002 \\
+Trust game & scale-free & on  & reciprocal & 0.950 / 0.708 & $<$0.001 \\
+Trust game & clustered  & off & fixed      & 0.337 / 0.708 & $<$0.001 \\
+Trust game & clustered  & off & random     & 0.337 / 0.349 & 0.912 \\
+Trust game & clustered  & off & reciprocal & 0.337 / 0.018 & 0.026 \\
+Trust game & clustered  & on  & fixed      & 0.493 / 0.708 & $<$0.001 \\
+Trust game & clustered  & on  & random     & 0.493 / 0.349 & 0.153 \\
+Trust game & clustered  & on  & reciprocal & 0.493 / 0.160 & 0.007 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%%=====================================================================
+\section{Pooled per-cell statistics}
+\label{sec:s9}
+%%=====================================================================
+
+Table~\ref{tab:pooled} reports, for every cell, the degree--payoff
+correlation computed by pooling all agent-runs in the cell (95\% CI
+via the Fisher $z$-transform), alongside Gini, prosocial-action rate and
+sanctioning statistics. These pooled correlations are
+\textbf{descriptive only}. They treat the $20 \times k$ agents in a
+cell as independent observations, which they are not: agents within a
+run share one generated network and one interaction history, so the
+Fisher interval understates uncertainty. All inferential statements in
+the main text instead use the mean \emph{within-run} correlation with
+confidence intervals bootstrapped over runs (main text,
+Section~3.4). The two agree closely in most cells; the largest
+divergence is the clustered trust game, where pooling gives $0.381$
+against a within-run mean of $0.337$ --- pooling across runs with
+differing degree distributions inflates the apparent association
+there.
+
+% NOTE: the per-cell degree ratios of sanctioned agents quoted in
+% main-text Section 4.4 (1.59-2.08x) are the "deg. ratio" column of
+% this table, restored below from the released exports
+% (results_summary.md).
+%
+% NOTE: both anomalies previously flagged in this table have been
+% checked against the exports and are real; they are explained in the
+% two paragraphs following the table rather than corrected.
+\begin{table}[htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.2pt}
+\caption{Pooled per-cell statistics (descriptive). $r$ is the pooled
+degree--payoff correlation with a Fisher-$z$ interval; Gini is the
+mean over runs with a normal-approximation interval; ``sanc./run'' is
+mean sanctions issued per run; ``deg.\ ratio'' is the mean degree of
+sanctioned agents relative to the cell's population mean degree.
+Fully-connected cells have zero degree variance, so $r$ is undefined.}
+\label{tab:pooled}
+\begin{tabular}{lllccccccc}
+\toprule
+Env & Population & Topology & Sanc. & runs & $r$ [95\% CI] & Gini [95\% CI] & Prosoc. & sanc./run & deg. \\
+\midrule
+commons & uniform-fair & full & off & 8 & --- & 0.119 [$-$0.114, 0.351] & 100.0\% & --- & --- \\
+commons & uniform-fair & full & on & 8 & --- & 0.000 [0.000, 0.000] & 100.0\% & 0.0 & --- \\
+commons & uniform-fair & clust. & off & 20 & 0.961 [0.953, 0.968] & 0.323 [0.298, 0.348] & 100.0\% & --- & --- \\
+commons & uniform-fair & clust. & on & 20 & 0.970 [0.963, 0.975] & 0.333 [0.307, 0.359] & 100.0\% & 0.0 & --- \\
+commons & uniform-fair & s.-free & off & 20 & 0.973 [0.967, 0.978] & 0.538 [0.516, 0.560] & 100.0\% & --- & --- \\
+commons & uniform-fair & s.-free & on & 20 & 0.981 [0.977, 0.985] & 0.584 [0.558, 0.611] & 100.0\% & 0.1 & 0.54 \\
+commons & mixed & full & off & 8 & --- & 0.494 [0.475, 0.513] & 47.1\% & --- & --- \\
+commons & mixed & full & on & 8 & --- & 0.480 [0.465, 0.495] & 43.1\% & 24.0 & 1.00 \\
+commons & mixed & clust. & off & 20 & 0.089 [$-$0.009, 0.186] & 0.423 [0.411, 0.435] & 45.9\% & --- & --- \\
+commons & mixed & clust. & on & 20 & 0.065 [$-$0.034, 0.162] & 0.416 [0.404, 0.429] & 37.4\% & 38.5 & 1.03 \\
+commons & mixed & s.-free & off & 8 & 0.353 [0.210, 0.482] & 0.394 [0.380, 0.409] & 42.8\% & --- & --- \\
+commons & mixed & s.-free & on & 8 & 0.298 [0.149, 0.433] & 0.395 [0.374, 0.417] & 39.4\% & 29.0 & 1.59 \\
+triage & uniform-fair & full & off & 8 & --- & 0.428 [0.389, 0.467] & 83.1\% & --- & --- \\
+triage & uniform-fair & full & on & 8 & --- & 0.479 [0.441, 0.517] & 80.0\% & 0.5 & 1.00 \\
+triage & uniform-fair & clust. & off & 8 & 0.381 [0.240, 0.506] & 0.367 [0.327, 0.407] & 88.9\% & --- & --- \\
+triage & uniform-fair & clust. & on & 8 & 0.466 [0.335, 0.579] & 0.354 [0.310, 0.399] & 89.6\% & 0.8 & 0.96 \\
+triage & uniform-fair & s.-free & off & 8 & 0.965 [0.952, 0.974] & 0.526 [0.490, 0.561] & 83.8\% & --- & --- \\
+triage & uniform-fair & s.-free & on & 8 & 0.947 [0.928, 0.961] & 0.523 [0.489, 0.557] & 85.1\% & 2.8 & 1.68 \\
+triage & mixed & full & off & 8 & --- & 0.332 [0.305, 0.359] & 48.5\% & --- & --- \\
+triage & mixed & full & on & 8 & --- & 0.340 [0.313, 0.368] & 47.9\% & 0.1 & 1.00 \\
+triage & mixed & clust. & off & 8 & 0.301 [0.153, 0.436] & 0.288 [0.272, 0.305] & 51.1\% & --- & --- \\
+triage & mixed & clust. & on & 8 & 0.362 [0.220, 0.490] & 0.295 [0.268, 0.321] & 51.6\% & 1.4 & 1.00 \\
+triage & mixed & s.-free & off & 8 & 0.714 [0.628, 0.782] & 0.375 [0.325, 0.426] & 48.0\% & --- & --- \\
+triage & mixed & s.-free & on & 8 & 0.650 [0.551, 0.732] & 0.392 [0.365, 0.418] & 47.2\% & 3.0 & 2.08 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Two entries in this table warrant explanation. The first is the
+uniform-fair fully-connected public-goods cell, where the sanctioning
+arm has a Gini of exactly zero but the no-sanctioning arm has
+$0.119$ despite an identically-rounded 100.0\% contribution rate. Both
+figures are correct. Seven of that cell's eight runs end at exactly
+zero inequality, as the symmetric graph and fixed contribution amount
+imply; in the eighth, a single agent returns no action in a single
+round (299 of 300 agent-rounds contribute, which rounds to 100.0\%
+when pooled across the cell's 2,400 agent-rounds). That one omission
+leaves the agent with a net payoff of $+10.0$ while all nineteen
+others end at $-0.526$, and because the Gini coefficient here is
+computed after shifting a wholly negative distribution to
+non-negativity, a lone positive outlier against uniformly small
+negatives drives the run's Gini to $0.95$. The cell mean is thus one
+extreme run averaged with seven zeros, which is also why the
+normal-approximation interval extends below zero: the approximation
+is inappropriate for a distribution of this shape, and the interval
+should not be read as an uncertainty statement about a
+non-negative quantity. Nothing in the paper's claims rests on this
+cell.
+
+The second is the sanctions-per-run figure for the uniform-fair
+scale-free public-goods cell, printed as $0.1$. The exact count is one
+sanction across all 20 runs, i.e.\ $0.05$ per run, rounded up for
+display at one decimal place; the main text states the exact count.
+That same single sanction is the source of this cell's $0.54\times$
+degree ratio, which is a one-observation quantity and carries no
+weight against the $1.59$--$2.08\times$ ratios in the three
+scale-free cells where sanctioning was exercised more than
+negligibly.
+
+%%=====================================================================
+\section{Variance decomposition table, and the clustered trust-game anomaly}
+\label{sec:s10}
+%%=====================================================================
+
+\subsection{Variance decomposition}
+\label{sec:s10-1}
+
+Full table for the decomposition summarised in Section~4.6 of the main
+text.
+
+Variance was partitioned by closed-form fixed-effects ANOVA over cell
+and marginal means, as specified in Section~3.7 of the main text.
+Because six public-goods cells were extended to 20 runs while the rest
+remain at 8 (main text, Section~3.2), this analysis uses the first 8
+runs of every cell, so
+that the decomposition is computed on a fully balanced design; the
+additional runs sharpen the H1 and H3 estimates but are excluded here,
+where unequal cell sizes would make the sum-of-squares partition
+ambiguous. Within-cell variation enters as residual rather than as an
+estimated random-effect component, so the percentages below are shares
+of explained variance under a balanced factorial decomposition. The
+Each share carries a 95\% percentile bootstrap interval over 10,000
+resamples. Replicates are drawn with replacement within each cell ---
+the design's own resampling unit, population, topology and
+sanctioning being fixed factors --- and the identical closed-form
+decomposition is rerun on every draw, so the interval and the point
+estimate cannot diverge in how they are computed. The intervals are
+stable across bootstrap seeds to within half a percentage point.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Share of explained variance by factor, balanced fixed-effects
+ANOVA. Degree--payoff $r$ excludes fully-connected topology (degree
+variance zero by construction, $r$ undefined); Gini uses all three
+topology levels. Interaction terms other than population $\times$
+topology are omitted from the table, so rows need not sum to exactly
+100\%. Brackets give 95\% percentile bootstrap intervals (10,000
+resamples, replicates resampled within cell).}
+\label{tab:anova}
+\begin{tabular}{llccccc}
+\toprule
+Outcome & Environment & Population & Topology & Sanctioning & Pop $\times$ Topo & Residual \\
+\midrule
+$r$ & Public goods & 85.5\% & 2.6\% & 0.0\% & 2.1\% & 9.7\% \\
+    &              & \tiny[80.0, 91.2] & \tiny[0.8, 5.4] & \tiny[0.0, 0.9] & \tiny[0.5, 4.6] & \tiny[5.1, 12.3] \\
+$r$ & Trust game & 9.8\% & 55.7\% & 0.4\% & 3.3\% & 28.8\% \\
+    &            & \tiny[3.4, 20.0] & \tiny[45.0, 67.4] & \tiny[0.0, 3.4] & \tiny[0.3, 10.5] & \tiny[16.7, 34.0] \\
+Gini & Public goods & 10.5\% & 19.3\% & 0.1\% & 41.3\% & 26.6\% \\
+     &              & \tiny[3.9, 17.4] & \tiny[8.9, 29.1] & \tiny[0.0, 1.9] & \tiny[23.0, 56.1] & \tiny[2.3, 48.5] \\
+Gini & Trust game & 35.9\% & 32.9\% & 0.4\% & 2.7\% & 26.9\% \\
+     &            & \tiny[26.5, 46.7] & \tiny[22.9, 44.6] & \tiny[0.0, 2.7] & \tiny[0.6, 7.1] & \tiny[17.0, 30.9] \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\subsection{The clustered trust-game anomaly}
+\label{sec:s10-2}
+
+One condition behaves unlike the rest, and is reported as an open
+question rather than folded into the account in Section~5. In
+clustered topology the trust game shows a weak degree--payoff
+relationship ($r=0.337$ [0.188, 0.493]) against $0.967$ in scale-free
+and $0.962$ for the public-goods game in the same topology. Four
+signals converge on it:
+
+\begin{enumerate}[leftmargin=1.6em]
+  \item \textbf{The H1 correlation itself} is weak, and weak
+  specifically in this one cell rather than across clustered topology
+  generally --- the public-goods game in the same topology is at
+  $0.962$.
+  \item \textbf{Real agents underperform a trivial heuristic.} A
+  fixed round-robin bot achieves $0.708$ here against real agents'
+  $0.337$ ($p=0.0009$), while real agents remain above the reciprocal
+  baseline ($0.018$, $p=0.026$). They sit between two trivial rules
+  rather than close to either.
+  \item \textbf{Referral concentration is lower.} The two
+  highest-degree agents are party to 17.7--21.6\% of referrals across
+  runs, against 45\% in scale-free.
+  \item \textbf{The referral pattern never stabilises.} Mean cosine
+  similarity between consecutive windows' referral vectors, averaged
+  over the 8 runs in the cell, is $0.23 \rightarrow 0.51 \rightarrow
+  0.69$ in clustered against $0.46 \rightarrow 0.83 \rightarrow 0.87$
+  in scale-free (Figure~2, main text). Scale-free structure locks in
+  after the first window; clustered structure keeps reorganising to
+  the end of the run.
+\end{enumerate}
+
+The fourth signal suggests a mechanism: bridge-mediated community
+structure appears to afford enough locally-legible choice that agents
+continue switching partners, which disrupts a clean degree ordering
+without producing an equalising one. This is a conjecture, not a
+result. Testing it requires manipulating bridge density as a
+continuous factor and measuring whether referral stability declines
+monotonically with it --- a design this study does not have, since
+bridge count was fixed at 40 for all clustered runs.
+
+%%=====================================================================
+\section{Cross-model comparison, full detail}
+\label{sec:s11}
+%%=====================================================================
+
+Summarised in Section~4.5 of the main text. DeepSeek carries the full
+factorial study; the other three backends were run on the confirmatory
+cell only (uniform-fair $\times$ scale-free, sanctioning off, both
+environments) at 8 runs each, through the identical harness, prompts
+and game code. Per-backend configuration is in Section~S7. These runs
+test the central structural effect only; they do not test the full
+factorial design, and therefore do not address whether the
+disposition--topology inversion (main text, Section~4.6) holds across
+backends.
+
+\begin{table}[ht]
+\centering
+\small
+\caption{Cross-model comparison on the confirmatory cell (uniform-fair
+$\times$ scale-free, sanctioning off), 8 runs per model and
+environment (DeepSeek public goods: 20). $r$ is the mean within-run
+degree--payoff correlation with a bootstrap CI over runs.}
+\label{tab:crossmodel}
+\begin{tabular}{llccc}
+\toprule
+Environment & Model & $r$ [95\% CI] & Gini & Prosocial rate \\
+\midrule
+Public goods & DeepSeek-v4-flash & 0.973 [0.968, 0.979] & 0.538 & 100.0\% \\
+Public goods & GLM-5.2           & 0.978 [0.969, 0.986] & 0.556 & 100.0\% \\
+Public goods & Mistral-Medium-3.5 & 0.980 [0.969, 0.989] & 0.601 & 100.0\% \\
+Public goods & Qwen3.5-122b      & 0.982 [0.973, 0.989] & 0.570 & 100.0\% \\
+\midrule
+Trust game & DeepSeek-v4-flash & 0.967 [0.958, 0.976] & 0.526 & 83.8\% \\
+Trust game & GLM-5.2           & 0.957 [0.929, 0.974] & 0.583 & 96.6\% \\
+Trust game & Mistral-Medium-3.5 & 0.957 [0.938, 0.974] & 0.565 & 100.0\% \\
+Trust game & Qwen3.5-122b      & 0.945 [0.923, 0.965] & 0.597 & 99.9\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Heterogeneity across the four models was assessed on the
+Fisher-transformed within-run correlations, weighting each model by
+its effective sample size. Public goods: $Q(3)=5.51$, $I^2=45.6\%$,
+$\tau^2=0.0042$, pooled $r=0.977$. Trust game: $Q(3)=5.16$,
+$I^2=41.9\%$, $\tau^2=0.0046$, pooled $r=0.957$. Both indicate
+moderate genuine between-model variation rather than sampling noise
+around a single value --- but around an effect that is near-ceiling in
+every model, so the variation lies in the third decimal.
+
+Across the four models the association between referral rate and
+degree--payoff correlation is, if anything, slightly negative. With
+four points this ordering should not be over-read; the load-bearing
+observation is the contrast in ranges, 16.2 percentage points against
+$0.022$.
+
+%%=====================================================================
+\section{Data and code availability}
+\label{sec:s12}
+%%=====================================================================
+
+All data underlying the reported results exist as per-run, per-round,
+per-agent event exports in JSON, comprising:
+
+\begin{itemize}[leftmargin=1.5em]
+  \item the \textbf{264-run factorial main study} on DeepSeek
+  (2 populations $\times$ 3 topologies $\times$ 2 institution levels
+  $\times$ 2 environments, 8 runs per cell, extended to 20 in six
+  public-goods cells);
+  \item \textbf{48 cross-model replication runs} (GLM-5.2,
+  Mistral-Medium-3.5, Qwen3.5-122b; 8 runs each per environment on the
+  confirmatory cell);
+  \item \textbf{240 non-LLM baseline runs} (fixed, random and, in the
+  trust game, reciprocal strategies, matching the main study's
+  topology $\times$ institution $\times$ 8-run design).
+  \item \textbf{8 cue-only control runs} (uniform-fair scale-free
+  public goods, the sanctioning clause present in the round prompt
+  with the sanctioning endpoint disabled at the backend), reported in
+  main-text Section~4.4 and released alongside the main study's own
+  exports for that cell.
+\end{itemize}
+
+All analyses reported in the main text have been run against these
+data and are complete: H1 and the sanctioning statistics, the H2
+self-report classification over all 59,440 unique agent-round
+justification texts (deduplicated from 75,822 recorded across the full
+264-run dataset), the non-LLM baseline permutation tests, the
+bootstrap equivalence test for H3, and the variance decomposition.
+The analysis scripts regenerate every reported statistic directly
+from the exports. They are pure-standard-library Python with no
+external numerical dependencies, so the full analysis --- including
+the non-LLM baselines, the keyword classifier and topology generation
+--- is reproducible without API access; only re-running the agent
+simulations themselves requires model access.
+
+Code, configuration and the run exports are publicly available at
+\url{https://github.com/Entropy-Hackers/collective-AI-assurance}.
+
+The free-text agent justifications underlying H2 are released in
+aggregated form --- per-agent, per-run classification rates and the
+per-cell prevalence tables --- rather than as the full corpus of
+59,440 unique texts.
+The exception is the calibration sample: all 148 items
+drawn for human coding are released verbatim, together with both blind
+coders' item-level assignments and the adjudicated resolutions, since
+the calibrated prevalence in Section~4.3 of the main text rests on
+these and would otherwise not be independently checkable. The
+classification pipeline (Section~S5) reproduces the aggregate rates
+from the full corpus for anyone re-running the simulations.
+
+%%=====================================================================
+\section*{Supplementary references}
+%%=====================================================================
+
+\noindent [S1] Landis, J.\,R.\ and Koch, G.\,G.\ (1977). The
+measurement of observer agreement for categorical data.
+\emph{Biometrics} 33(1):159--174.
+\doi{10.2307/2529310}
 
 \end{document}

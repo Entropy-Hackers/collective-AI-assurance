@@ -1,22 +1,20 @@
 %%=====================================================================
-%%  DRAFT v1 -- PLACEHOLDER RESULTS, NOT REAL DATA
-%%  Target: Nature Machine Intelligence (primary); Nature Human
-%%  Behaviour / Science Advances / PNAS as alternatives.
+%%  manuscript_v4.tex --- data-verification revision of manuscript_v3.tex for
+%%  submission to Nature Machine Intelligence. Substantive changes are
+%%  recorded in the % REVISION V4 log at the end of this file, which
+%%  follows the retained % REVISION V3 log.
 %%
-%%  Every number in \ph{...} (rendered in BLUE) is an assumed,
-%%  illustrative placeholder for what the main study
-%%  (tools/reports/phase2_planning.md's 24-cell x >=8-replicate design)
-%%  MIGHT show, extrapolated from pilot-stage trends
-%%  (phase1_pilot_results.md, triage_pilot_results.md,
-%%  sanctioning_results.md, multimodel_comparison_results.md) on the
-%%  OPTIMISTIC assumption that the main study confirms H1/H2 at
-%%  roughly pilot-stage magnitude with tighter confidence intervals.
-%%  NONE of this has been measured. Every \ph{} value must be replaced
-%%  with the real main-study number -- and the surrounding prose
-%%  re-checked against what the real number actually shows, which may
-%%  not match this placeholder narrative -- before this draft leaves
-%%  this stage. Search for "\ph{" to find every value requiring
-%%  replacement.
+%% PROVENANCE (resolved in v4): the v2 header described this file as a
+%% "read-as-real" rendering whose values were "illustrative
+%% extrapolations". That is no longer true of any value in this file.
+%% Every reported number has been checked against the released exports
+%% at https://github.com/Entropy-Hackers/collective-AI-assurance and
+%% is a final computed value; the one surviving placeholder identified
+%% during that check (the pooled "topology 46% / alignment 11%"
+%% variance framing, flagged as extrapolated in the repository's own
+%% variance_and_h3_results.md) had already been replaced by the real
+%% per-environment tables in v3. Values corrected in this revision are
+%% listed in the % REVISION V4 log at the end of this file.
 %%=====================================================================
 
 \documentclass[11pt,a4paper]{article}
@@ -30,69 +28,55 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{xcolor}
 \usepackage{xurl}
+\usepackage{doi}
 
 \geometry{margin=2.5cm}
+\setlength{\emergencystretch}{1em}
 \setcitestyle{authoryear,round,semicolon,aysep={},yysep={;},notesep={, }}
 \newcommand{\doilink}[1]{\href{https://doi.org/#1}{https://doi.org/#1}}
 
-%% Placeholder-result marker: BLUE = not real data, replace before submission.
-\newcommand{\ph}[1]{\textcolor{blue}{#1}}
+\title{\bfseries Why collective AI assurance cannot target agents or networks in isolation}
 
-\title{\bfseries Individual compliance does not guarantee collective
-fairness: structural inequality in networked populations of
-autonomous LLM agents}
-
-\author{Anonymous Author(s) \\ \small Affiliation withheld pending
-author-order decision}
+\author{Heimo M\"uller$^{1,2}$ \and Markus Plass$^{1}$ \and
+Andreas Holzinger$^{1,3,4,*}$}
 \date{}
 
 \begin{document}
 \maketitle
 
-\begin{center}
-\fbox{\parbox{0.85\textwidth}{\centering\bfseries
-DRAFT v1 --- placeholder results. All values in \ph{blue} are
-illustrative placeholders, not measured data. Do not circulate,
-cite, or submit.}}
-\end{center}
-
+\noindent\textit{$^{1}$Medical University of Graz, Graz, Austria.
+$^{2}$Human-Mind-Machine Corporation, Graz, Austria.
+$^{3}$BOKU University Vienna, Vienna, Austria.
+$^{4}$Graz University of Technology, Graz, Austria.\\
+$^{*}$Corresponding author:
+\href{mailto:andreas.holzinger@human-centered.ai}{andreas.holzinger@human-centered.ai}}
 \vspace{1em}
 
 %%---------------------------------------------------------------------
 \section*{Abstract}
 %%---------------------------------------------------------------------
 
-Governance frameworks for artificial intelligence, including the EU
-AI Act, certify the conformity of individual systems; none takes an
-interacting population as its unit. We test whether individual
-behavioural compliance is nonetheless sufficient for collective
-fairness once compliant autonomous agents interact through a shared
-network structure. Populations of large-language-model agents, each
-following an identical fairness-oriented persona, played two
-structurally distinct multi-agent games --- a networked public-goods
-game and a networked, medically-framed trust game --- across three
-network topologies, with and without a peer-sanctioning institution.
-Despite near-uniform individual behaviour, final payoffs correlated
-strongly with network position in hub-dominated topologies, producing
-substantial inequality among agents following textually identical
-instructions. Comparison against non-LLM baseline strategies shows
-part of this inequality is close to mechanically guaranteed by the
-payoff structure itself, but agents' own reciprocity-aware behaviour
-in the trust game produced measurably \emph{more} inequality than a
-simple, automated reciprocal rule --- a genuine behavioural effect,
-not only a structural one. Agents' self-reported reasoning showed a
-mechanic-dependent gap between situational awareness and structural
-outcome, and a real peer-sanctioning institution, once actually used,
-correctly identified the agents responsible for the imbalance without
-correcting it. The core effect replicated across five independent
-model providers and architectures, with genuine cross-provider
-variation in magnitude rather than suspiciously identical numbers.
-Individual compliance, situational awareness, and institutional
-sanctioning are jointly insufficient to correct structurally
-determined unfairness in networked populations of autonomous
-agents --- a blind spot current single-system conformity assessment
-does not address. (Illustrative figures only pending full-scale data;
-see Results.)
+AI governance increasingly targets coordination between agents rather
+than agents in isolation, but which feature of an interacting
+population produces a collective outcome has not been experimentally
+decomposed. We varied
+agent disposition, topology, interaction mechanic and peer sanctioning
+factorially across 264 runs of two multi-agent games, with matched
+non-LLM baselines and four model families. Structural and behavioural causes
+prove separable: a non-reasoning bot reproduces the
+public-goods game's degree--payoff relationship almost exactly, while
+in the trust game agents generate significantly more degree-linked
+inequality than a minimal reciprocal rule. Neither prosociality nor
+awareness prevented unequal outcomes here: agents following an
+identical fairness persona at rates from 84\% to 100\% across model
+families produced
+near-identical degree-linked inequality, and articulating one's own
+position conferred no payoff advantage. Most consequentially, whether
+disposition or topology explains the outcome inverts between the two
+interaction regimes, with model, personas and topologies held
+identical. Collective assurance therefore cannot generally be assigned
+to a fixed level of the system: the appropriate assurance target
+depends on the interaction regime and its causal structure.
 
 \vspace{1em}
 
@@ -100,105 +84,154 @@ see Results.)
 \section{Introduction}
 %%---------------------------------------------------------------------
 
-Autonomous large-language-model (LLM) agents are moving from
-single-system deployments toward settings where they interact
-directly with each other, with growing independence and shrinking
-human-in-the-loop oversight. This is already partially true in
-production: health systems including Stanford Health Care (RAISE
-Health / FURM framework) and Mayo Clinic run agentic AI for referral
-preparation, discharge coordination, and operational scheduling, with
-human review reserved for high-stakes decisions rather than every
-step. Regulatory frameworks have not kept pace with this shift: the
-EU AI Act, like most current AI governance instruments, certifies the
-conformity of \emph{individual} systems --- does this one model behave
-safely, fairly, within specification --- and has no mechanism for the
-risk that emerges only from \emph{how several independently-compliant
-agents interact through a shared structure}.
+Populations of interacting large-language-model (LLM) agents can
+exhibit collective properties not predictable from any agent
+considered in isolation, and recent work has established this as a
+distinct class of risk requiring governance at the level of
+coordination rather than the individual system (Section~2). The
+concern is not hypothetical: health systems already deploy
+increasingly autonomous AI systems for administrative and coordination
+tasks such as preliminary triage and scheduling, while more autonomous
+medical agents remain largely at the development or pilot stage
+\citep{Athni:2026:Health}. It is the coordination layer, not clinical
+autonomy, that is already in place --- and that is the layer at which
+the properties studied here arise. Existing regulation is organised differently,
+assigning conformity obligations to identifiable systems and providers
+\citep{EuropeanUnion:2024:AIAct} without supplying a substantive assurance criterion
+for distributional properties that arise between them. Alignment practice
+reinforces the individual framing, training and evaluating one model
+at a time \citep{Ouyang:2022:Instructions,Bai:2022:Constitutional}.
 
-\citet{athni2026} names this gap directly in a healthcare context: AI
-agents coordinating triage and scheduling with each other create a
-``digital ecosystem'' operating beyond active human oversight, with
-risks --- rapid error propagation, accelerated data leakage,
-spontaneous unintended hierarchies --- that are qualitatively
-different from any single agent's individual failure modes. That
-piece is a perspective, not a controlled study. This paper provides,
-to our knowledge, the first controlled experimental demonstration of
-the mechanism it raises qualitatively: a population of LLM agents,
-each individually and consistently compliant with the same fairness
-norm, still produces large, systematic, structurally-determined
-inequality in outcomes --- purely as a function of network position,
-through a mechanism the agents are never told about and are not
-reasoning about strategically.
+Granting that the coordination layer is the right level at which to
+intervene leaves a question that literature does not settle: what
+\emph{within} an interacting population actually produces the
+collective outcome, and does that locus stay fixed? The question has
+an immediate methodological edge, because an observed relationship
+between network position and outcome may be a structural property of
+the interaction rule rather than anything about the agents ---
+\citet{Sheng:2026:Equality} establish exactly such an effect in networks with no
+learned agents at all.
 
-This is deliberately not a study of whether LLM agents \emph{behave
-like humans} in classical behavioural-game-theory paradigms, the
-framing of \citet{han2025} and \citet{ashery2025}. It investigates the
-agents themselves, under conditions relevant to how they are actually
-being deployed: what happens when individually compliant, increasingly
-autonomous agents interact through a fixed structure, and whether
-monitoring or certifying each one individually is enough to catch the
-collective result.
+We therefore vary agent disposition, topology, interaction mechanic
+and sanctioning factorially, and run matched non-LLM baselines through
+the identical mechanic to separate what the structure guarantees from
+what the agents contribute. The central result is that no single
+governance target dominates: which factor explains the collective
+outcome depends on the interaction regime, inverting between our two
+environments under an identical model and identical personas.
 
-\textbf{Contributions.} (1) Two structurally distinct multi-agent
-environments in which a network-scoped payoff mechanic makes topology
-a real resource-access constraint rather than narrative framing only.
-(2) Evidence that homogeneous LLM agent behaviour does not collapse to
-graph-theoretically trivial dynamics the way it would for
-fixed-strategy classical agents. (3) A quantified comparison against
-non-LLM baseline strategies isolating the mechanically-guaranteed
-component of the observed inequality from the genuinely
-LLM-behavioural component. (4) A finding on the relationship between
-self-reported reasoning and structural position, and evidence that
-this relationship is itself mechanic-dependent. (5) A test of whether
-peer sanctioning, once actually invoked, corrects the inequality it
-correctly targets.
+\textbf{Contributions.} (1) A factorial separation of agent
+disposition, topology, interaction mechanic and sanctioning in two
+structurally distinct environments, with matched non-LLM baselines run
+through the identical mechanic --- establishing that a high
+degree--payoff correlation is by itself no evidence of agent-specific
+behaviour, and locating where a real behavioural effect nonetheless
+appears. (2) Evidence that structural awareness in agents' stated
+reasoning is environment-dependent, and that where it is near-universal
+it still confers no payoff advantage once network position is
+controlled for. (3) A test of whether peer reputational sanctioning
+corrects the inequality it correctly targets, and a direct test
+showing that its measurable effect comes from the prompt cue rather
+than from the institution. (4) A variance decomposition showing that
+whether disposition or network position governs the collective outcome
+varies with the interaction regime --- so that no fixed
+assurance target can be presumed adequate in advance.
 
 %%---------------------------------------------------------------------
 \section{Related work}
 %%---------------------------------------------------------------------
 
-\citet{han2025} and \citet{ashery2025} use LLM populations as a
-stand-in for human subjects in classical networked game-theory
-paradigms, comparing LLM aggregate behaviour against known human
-experimental results. Both treat the LLM-versus-human comparison as
-the object of study; this paper instead treats the LLM multi-agent
-population as the object of study in its own right, under a
-governance-relevant question those papers do not ask.
+\subsection{Collective phenomena in LLM-agent populations}
 
-Several 2026 papers work close enough to this design to require
-explicit positioning, though none replicate its exact combination of
-homogeneous alignment, an imposed fixed topology, a real fairness
-game, and a degree-centrality-versus-outcome dependent measure.
-\citet{preferentialattachment2026} report centrality-versus-outcome
-effects in autonomous LLM networks, but via agent
-\emph{heterogeneity} in a \emph{self-organising} network, not uniform
-alignment under an imposed topology. \citet{conformitymisalignment2026}
-argue a closely related thesis --- individually aligned agents
-producing collective misalignment --- via opinion-dynamics modelling,
-with no network-topology factor. \citet{collectivecooperation2026}
-study a networked prisoner's dilemma with real topology and an
-LLM-versus-human comparison, but heterogeneous agents and no
-centrality-payoff analysis.
+Building on work simulating societies of LLM agents
+\citep{Park:2023:Generative,Li:2023:CAMEL}, decentralised populations have been
+shown to develop shared conventions and acquire collective biases no
+individual agent exhibits \citep{Ashery:2025:Conventions}, while conformity
+dynamics can drive individually aligned agents into stably misaligned
+states \citep{DeMarzo:2026:Conformity}. \citet{Piatti:2024:Cooperate} find
+most LLM agents fail to reach sustainable equilibria in common-pool
+dilemmas; \citet{Han:2025:Static} that static network structure does not
+stabilise their cooperation as it does for humans; and
+\citet{deArruda:2026:Cooperation} that aggregate human-like outcomes
+can arise without matching individual mechanisms --- a caution taken
+up in Section~4.2. \citet{Zhang:2026:Preferential} find
+preferential attachment and persistent centrality disparities when
+agents choose their own collaborators, where we assign topology
+exogenously so that position can be treated as morally arbitrary
+(Section~3.5). Outside stylised dilemmas, \citet{Cemri:2025:Failures} locate
+much of the failure in deployed multi-agent frameworks in system
+design and inter-agent interaction rather than model capability. These
+studies establish that collective properties diverge from individual
+ones without decomposing why.
 
-\citet{obermeyer2019} showed a deployed healthcare resource-allocation
-algorithm produced systematically biased outcomes with no individually
-``bad'' actor anywhere in the pipeline, purely through a structural
-proxy effect --- the closest published precedent for this paper's
-claim in a single-system setting. \citet{agentclinic2026} benchmark a
-single ``doctor'' agent's diagnostic accuracy across isolated
-single-patient encounters; no population of interacting agents, no
-network structure, no collective outcome measured, and hence no
-overlap with the present claim.
+\subsection{Network structure and distributional inequality}
 
-Classical, non-LLM networked-game theory treats strictly homogeneous
-populations as producing dynamics that reduce to a graph-theory fact
-once every node runs the same fixed strategy --- not an interesting
-behavioural finding. LLM agents are not fixed-strategy players: they
-interpret local context and can behave differently by network position
-under textually identical instructions, so homogeneous disposition
-does not automatically collapse to trivial dynamics the way it would
-for classical rational agents. Section~4.2's non-LLM baseline
-comparison makes this an empirical question rather than an assumption.
+That individually reasonable local rules can produce unintended
+global patterns has long precedent: \citet{Schelling:1971:Segregation} showed mild
+preferences over neighbours producing full residential segregation.
+\citet{Sheng:2026:Equality} give the version that matters most here, showing
+theoretically and across empirical networks that allocation policies
+promoting cooperation concentrate resources on well-connected
+individuals, leaving peripheral ones worse off than under no
+cooperation at all; and the pattern appears in deployment, where
+\citet{Obermeyer:2019:Bias} traced systematic bias in a healthcare
+allocation algorithm to the use of healthcare costs as a proxy for
+health need, illustrating how distributional bias can arise from
+system design without requiring discriminatory decisions at the point
+of allocation. Inequality of this kind is a candidate
+structural property of the allocation rule, not evidence about the
+agents --- which is why our public-goods result is framed as a test
+against that baseline rather than a discovery, and why the non-LLM
+controls in Section~4.2 are load-bearing.
+
+\subsection{Governance beyond the individual agent}
+
+\citet{Hammond:2025:MultiAgent} organise multi-agent risks into a distinct class
+--- miscoordination, conflict, collusion --- underpinned by factors
+including network effects, and \citet{Tomasev:2025:Distributional} shift the unit of
+safety analysis from a single model to coordinated agent populations.
+\citet{Bohr:2026:Coordination} makes the architecture concrete with
+\emph{coordination transparency}: interaction logging, live
+monitoring, intervention hooks and boundary conditions, arguing that
+model-level assurance is necessary but insufficient.
+\citet{Pierucci:2026:Institutional} reframe alignment from preference engineering in
+agent-space to mechanism design in institution-space, and
+\citet{BracaleSyrnikov:2026:Collusion} show that a regime with enforceable
+consequences substantially reduces LLM collusion in Cournot markets
+while a prompt-only prohibition does not --- a contrast our
+sanctioning result speaks to directly (Section~4.4). Earlier
+multi-agent work anticipated the design question
+\citep{Shoham:1995:Laws,Boella:2006:Normative,Savarimuthu:2011:Norms}; \citet{Shavit:2023:Agentic}
+translate it into engineering practice and \citet{Sarkar:2026:Transparency} address
+the organisational logics shaping alignment decisions. This literature
+identifies the right \emph{layer}; it does not supply an experimental
+decomposition of which feature within that layer drives the
+outcome.
+
+\subsection{Fairness and compositional assurance}
+
+Our use of ``fairness'' differs from the individual- and group-level
+criteria studied in the algorithmic-fairness literature
+\citep{Dwork:2012:Fairness}, which evaluate a single system's output. We do not
+claim that our agents satisfy the formal individual-fairness criterion
+of \citet{Dwork:2012:Fairness}, which constrains a classifier's outputs relative
+to a task-specific similarity metric. Rather, every agent in the
+uniform-fair condition is given the same fairness-oriented
+disposition, and inequality is evaluated at the level of the resulting
+population --- the finding being that uniformity of disposition is
+compatible with substantial collective inequality.
+\citet{Selbst:2019:Abstraction} make the
+general point that fairness cannot be evaluated inside an isolated
+technical artefact abstracted from the system it sits in; this paper
+supplies a controlled instance of that abstraction failing.
+
+The inference the paper tests --- from component guarantees to a
+system property --- is the object of assume-guarantee reasoning in
+compositional verification \citep{Henzinger:1998:Assume}, where component
+guarantees hold only under explicit assumptions about the environment
+each component operates in --- the framing that makes our result
+statable (Section~5).
+
 
 %%---------------------------------------------------------------------
 \section{Methods}
@@ -207,17 +240,29 @@ comparison makes this an empirical question rather than an assumption.
 \subsection{Environments}
 
 Two structurally distinct multi-agent games, both built on a
-network-scoped local-payoff principle. In the \textbf{networked
-public-goods game}, each round an agent chooses to contribute a fixed
-amount, split equally among its visible network neighbours, or extract
-it for itself; payoff is network-scoped, so an agent's in-degree is a
-real determinant of what it receives regardless of its own behaviour.
-In the \textbf{networked trust game} (medically framed: agents are
-treatment coordinators in a referral network), each round an agent
-chooses one visible colleague to send a trust-multiplied share of its
-resource to, or keeps it for its own patient --- a targeted, dyadic
-mechanic whose outcome depends on real reciprocity rather than a
-symmetric split, per \citet{berg1995}.
+network-scoped local-payoff principle extending the local-neighbourhood
+mechanic of \citet{Nowak:1992:Spatial}. In the \textbf{networked public-goods
+game} (a commons dilemma in the tradition of \citet{Ostrom:1990:Commons}), each
+round an agent chooses to contribute a fixed amount, split equally
+among its visible network neighbours, or extract it for itself; payoff
+is network-scoped, so an agent's degree is a real determinant of
+what it receives regardless of its own behaviour. In the
+\textbf{networked trust game} (medically framed: agents are treatment
+coordinators in a referral network), each round an agent chooses one
+visible colleague to send a trust-multiplied share of its resource to,
+or keeps it for its own patient --- a targeted, dyadic mechanic whose
+outcome depends on real reciprocity rather than a symmetric split, per
+\citet{Berg:1995:Trust}. Both games were run rather than either alone because
+the public-goods game's symmetric split makes an agent's degree a
+partial mechanical determinant of its payoff by construction; the
+trust game's targeted, dyadic structure has no such built-in guarantee,
+so a structural effect that appears in both environments cannot be
+attributed to one game's specific payoff arithmetic alone. The two
+environments differ not only in the mechanic itself but in coupled
+properties of the interaction regime --- payoff arithmetic,
+neighbourhood versus dyadic scope, and the role of reciprocity ---
+a point taken up where regime differences are interpreted
+(Sections~4.6 and~5).
 
 \subsection{Population and manipulation}
 
@@ -226,51 +271,110 @@ under an identical fair/cooperative persona) or mixed (a fixed
 round-robin of fair, self-interested, and neutral personas).
 \textbf{Topology} (3 levels): fully-connected (null condition, no
 degree variance), clustered, and scale-free (hub-dominated).
-\textbf{Institution} (2 levels): peer sanctioning off or on, per
-\citet{fehr2000,fehr2002}; when on, the round prompt explicitly cues
+\textbf{Institution} (2 levels): a reputational peer-sanctioning
+mechanism off or on, inspired by the experimental punishment
+literature \citep{Fehr:2000:Punishment,Fehr:2002:Altruistic} but differing from it in
+where the cost falls: a sanction lowers the target's reputation
+without altering any payoff, and is costly only to the sanctioner,
+whose call ends the turn and so forgoes that round's allocation
+(Supplementary Section~S3). When on, the round prompt explicitly cues
 the sanctioning option from round 1. Population size $n=20$, 15 rounds
-per run, $\ph{\geq 8}$ replicates per cell, label-randomized
-contribute/extract (respectively send/keep) terminology per run.
-Individual behavioural compliance with the assigned persona is
-operationalized as the rate at which an agent takes the persona-
-consistent action each round (contributing/sending for the fair
-persona); this rate, not agents' self-reports, is what ``uniform
-compliance'' refers to throughout, and is reported directly in
-Section~4.1.
+per run, 8 replicates per cell.
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{figures/topology_structural.pdf}
-\caption{The two non-trivial topology conditions at the main study's
-actual parameters ($n=20$ agents). Clustered: four fully-connected
-groups of five (colour-coded) joined by 40 inter-cluster bridge edges,
-laid out with cluster centres on a circle so group membership stays
-visually legible under the bridges. Scale-free: preferential-attachment
-growth ($m=2$), force-directed layout; node size is proportional to
-degree in both panels. The inter-cluster bridge count is chosen so
-that clustered and scale-free reach comparable degree variance
-(standard deviation of degree, reported above each panel), which is
-what the degree--payoff correlation in Section~4.1 requires to be
-measurable in the first place.}
-\label{fig:topology}
-\end{figure}
+Replication was extended adaptively in a subset of cells, and the
+procedure is stated here in full so that it cannot be mistaken for
+undisclosed optional stopping. After the initial 8-run estimates had
+been computed, three public-goods population $\times$ topology
+conditions (uniform-fair $\times$ clustered, uniform-fair $\times$
+scale-free, mixed $\times$ clustered) were extended to 20 replicates
+in both sanctioning arms --- six cells, 72 additional runs. The
+criterion for extension was estimation precision, not direction of
+effect: in these cells the initial estimate of the H1 correlation or
+of the H3 Gini difference lay too close to zero or to the
+pre-specified equivalence margin to adjudicate the hypothesis, and a
+condition was always extended in both sanctioning arms symmetrically.
+The hypotheses, falsification criteria and analysis methods
+(Section~3.6) were fixed before the confirmatory dataset was analysed
+and were not modified by the extension decision; this prespecification
+was internal to the project, and the study was not preregistered.
+Analyses that require a balanced design use only the first 8 runs of
+every cell and are therefore unaffected by the extension: the variance
+decomposition (Section~4.6) and all H2 self-report results
+(Section~4.3). H1 and H3 estimates use all available runs, with run
+counts reported per cell (Table~\ref{tab:h1}). The main study
+therefore comprises 264 runs.
+Contribute/extract (respectively send/keep) terminology is
+label-randomized per run.
+Behaviour is measured by the rate at which an agent takes the
+prosocial action each round: the \emph{contribution rate} in the
+public-goods game and the \emph{referral rate} in the trust game
+(sending rather than keeping). These rates, not agents' self-reports,
+are what the behavioural results in Section~4.1 report.
+
+We deliberately do not call these rates ``compliance''. The fair
+persona for the trust game instructs the agent to refer \emph{when it
+judges a colleague better placed} and not to hoard \emph{by default}
+(Supplementary Section~S1), so a round in which an agent keeps the
+resource after weighing its options is not necessarily a departure
+from the persona --- agents that keep frequently cite network-level
+fairness as their reason for doing so. The referral rate is therefore
+a lower bound on persona-consistency, and differences in it between
+models may reflect how literally a model reads an instruction
+containing a judgment clause as much as how faithfully it follows one.
+The public-goods persona admits the same reading in principle, though
+there the contribution rate is at ceiling in every uniform-fair cell,
+leaving no room for the distinction to matter. Population size and round count were checked rather than
+assumed: a population-size sweep from 10 to 160 agents showed the
+core degree--payoff correlation and its precision essentially
+unchanged, and extending runs beyond 15 rounds did not alter the
+qualitative pattern, supporting $n=20$, 15 rounds as an adequate,
+non-arbitrary operating point rather than a convenience choice.
 
 \subsection{Model and agent runtime}
+
+Each agent is defined entirely by prompt text, with no fine-tuning: a
+fixed persona statement for the whole run, plus a per-round message
+(a longer tutorial at round 1, a short state reminder thereafter).
+Each agent-turn consists of a read-only state check (visible
+neighbours, prior-round outcome, reputation signals) followed by
+exactly one action call, accompanied by a short free-text
+justification the agent supplies alongside its choice; this
+justification field is the raw material for the H2 self-report
+analysis (Section~3.4). When the sanctioning institution is inactive
+the action is contribute/extract or send/keep. When it is active,
+sanctioning is a third mutually exclusive option rather than an
+additional one: an agent that sanctions forgoes its resource decision
+for that round, which is recorded as no allocation and yields no
+payoff from its own endowment, though the agent still receives any
+incoming transfers. A turn ends programmatically as soon as the
+action call succeeds, rather than relying on a model-issued stop
+signal, since not every provider emits one reliably --- necessary for
+consistent data collection across backends.
 
 Primary model: DeepSeek (\texttt{deepseek-v4-flash}), a
 ``lightweight'' direct-completion runtime with full relevant context
 re-sent each round rather than a persistent stateful agent --- the
 field-standard methodology for this kind of study
-\citep{han2025,networkgames2026}. A scoped cross-model robustness check
-was run on the strongest-signal cell (uniform-fair $\times$
-scale-free): four additional independent providers/architectures at
-pilot scale (GPT-4o; GLM-5.2; Qwen, both locally-hosted and via a
-third-party hosted endpoint; Mistral-Large-3).
+\citep{Han:2025:Static,Qiu:2025:NetworkGames}. This model carries the full
+factorial main study. Three further models from independent providers
+and architecture families (GLM-5.2, Mistral-Medium-3.5, Qwen3.5-122b) were
+run on the confirmatory cell only (uniform-fair $\times$ scale-free,
+sanctioning off, both environments) at 8 runs each --- 48 additional
+runs --- through the identical harness, prompts and game code
+(Section~4.5; per-backend configuration in Supplementary
+Section~S7).
 
 \subsection{Metrics}
 
 Primary: Pearson correlation between an agent's network degree and its
-cumulative net payoff. Gini coefficient of the final net-payoff
+cumulative net payoff, computed \emph{within} each replicate run and
+then averaged across runs, with 95\% confidence intervals from
+bootstrap resampling over runs (10,000 resamples). The unit of
+independent observation is the run, not the agent: the 20 agents in a
+run share one generated network and one interaction history, so
+treating them as independent observations would understate
+uncertainty. Correlations pooled over all agent-runs in a cell are
+reported in Supplementary Information as descriptive statistics only. Gini coefficient of the final net-payoff
 distribution --- a standard summary of inequality across a
 distribution, ranging from 0 (every agent ends with an identical
 payoff) to 1 (one agent holds the entire population's payoff);
@@ -285,9 +389,9 @@ its actual structural position, on two dimensions (situational
 awareness; fairness/trust assertion). The judge classifier is the
 primary H2 metric; a free keyword-based classifier is retained as a
 fast secondary check. Both were validated against blind human coding
-on a 30-item spot-check sample: substantial agreement (Landis \&
-Koch) on both dimensions and against both automated classifiers
-($\kappa=0.66$--$0.79$). An initial human-coding pass on the awareness
+on a 30-item spot-check sample: agreement was substantial in the
+sense of \citet{Landis:1977:Agreement} on both dimensions and against both
+automated classifiers ($\kappa=0.66$--$0.79$). An initial human-coding pass on the awareness
 dimension was itself unusable (definition drift toward "contains any
 justification" rather than "references a specific structural
 relationship") and had to be redone with anchor examples added to the
@@ -295,283 +399,941 @@ coding instructions --- kept as a documented methods note, since it
 illustrates a real failure mode of unanchored human coding that the
 automated classifiers do not share.
 
+\subsection{What ``unfairness'' denotes here}
+
+The measured quantities --- Gini and the degree--payoff correlation ---
+establish \emph{inequality} and its structural dependence, which are
+empirical facts. Calling that inequality \emph{unfair} is a normative
+step and is licensed here only by a specific feature of the design:
+network position is assigned exogenously and at random, is not earned,
+and is uncorrelated with any agent's disposition, contribution, need,
+or performance --- all of which are held identical by construction in
+the uniform-fair population. We therefore operationalize structural
+unfairness as \emph{differences in final resource allocation
+attributable to exogenously assigned network position rather than to
+any difference in agent disposition, contribution, need, or
+performance}. Under a different normative criterion --- one on which a
+hub legitimately earns more by bearing more coordination load --- the
+same distributions would not count as unfair, and the paper's
+empirical claims would stand unchanged. We use ``structural
+inequality'' for the measurement and ``structural unfairness'' only
+where the above criterion is being invoked.
+
+\subsection{Hypotheses and falsification criteria}
+
+Three hypotheses were specified, with falsification criteria and
+analysis methods fixed before the confirmatory dataset was analysed
+(prespecified internally; the study was not preregistered ---
+Section~3.2). H1 and H3 are stated with deliberately asymmetric
+scope: the confirmatory claim covers the uniform-fair $\times$
+scale-free condition in both environments --- the condition where
+structural advantage is largest and where the hypotheses are therefore
+most sharply testable --- with all remaining cells reported
+descriptively.
+
+\textbf{H1 (structural inequality under uniform disposition).} In a
+population of agents following an identical fairness-oriented persona,
+an agent's network degree predicts its cumulative net payoff.
+Disconfirmed if the 95\% CI on the degree--payoff correlation in the
+confirmatory condition includes zero, or if the point estimate falls
+below $r=0.30$.
+
+\textbf{H2 (self-report does not correct structural position).}
+Agents' self-reported situational awareness does not prevent the
+structurally determined outcome. Evidence against H2 would be
+awareness language that is both prevalent and accompanied by an
+attenuated degree--payoff relationship.
+
+\textbf{H3 (peer reputational sanctioning does not reduce
+inequality).} A reputational peer sanction --- one that imposes a
+standing cost on the target but does not alter the resource ledger ---
+does not reduce the Gini inequality of final payoffs, even where it
+demonstrably targets high-degree agents: its effect on Gini falls
+within a pre-specified practical-equivalence margin of $\pm0.05$. The
+hypothesis is deliberately restricted to this class of institution;
+it makes no claim about sanctions with enforceable economic
+consequences. Tested by bootstrap equivalence test (10,000
+resamples, percentile CI) rather than parametric TOST. H3 is confirmed
+only if the CI lies entirely within the margin --- a stricter standard
+than a non-significant difference.
+
 \subsection{Analysis model}
 
-Mixed-effects regression, \texttt{outcome\_metric $\sim$ alignment
-$\times$ topology $\times$ institution + (1\,|\,seed)}, fit separately
-per environment.
+The factorial structure is \texttt{outcome\_metric $\sim$ alignment
+$\times$ topology $\times$ institution}, fit separately per
+environment, with run as the unit of observation. We report it as a
+fixed-effects variance decomposition on a balanced subset rather than
+as a fitted mixed-effects model; the reasons and consequences are
+stated where the decomposition appears (Section~4.6). Uncertainty on
+each variance share is a 95\% percentile bootstrap interval over
+10,000 resamples: replicates are drawn with replacement within each
+cell --- the design's own resampling unit, alignment, topology and
+institution being fixed factors --- and the identical closed-form
+decomposition is rerun on each draw, so interval and point estimate
+cannot diverge in their computation. All analyses use
+run-level resampling for inference and are implemented in
+pure-standard-library Python with no external numerical dependencies,
+so that every reported statistic is reproducible from the released raw
+exports without a specific solver stack.
 
 %%---------------------------------------------------------------------
 \section{Results}
 %%---------------------------------------------------------------------
 
-\emph{Every figure in this section shown in \ph{blue} is an
-illustrative placeholder extrapolated from pilot-stage data, not a
-main-study measurement (see the note at the top of this document);
-this applies throughout the section and is not repeated at each
-individual value.}
+\subsection{H1: structural inequality under a uniform fairness disposition}
 
-\subsection{H1: structural inequality under uniform compliance}
-
-In both environments, agents in the uniform-fair population behaved
-near-identically (\ph{$>$97\%} contribute/send rate across all
-topologies) while final payoffs diverged sharply by network position.
-In scale-free topology, degree correlated strongly with cumulative net
-payoff in the public-goods game (\ph{$r=0.93$, 95\% CI [0.89, 0.96]},
-$n=\ph{160}$ agent-runs) and even more strongly in the trust game
-(\ph{$r=0.97$ [0.95, 0.99]}). Gini coefficients were \ph{0.41 [0.37,
-0.45]} and \ph{0.55 [0.51, 0.59]} respectively --- substantial
-inequality generated purely by network position among agents all
-nominally following the identical fair disposition. With
-\texttt{inter-cluster-edges} raised to 40 (Table~\ref{tab:h1}),
-clustered topology showed a comparably strong effect
-(\ph{$r=0.89$ [0.84, 0.93]}, public goods), resolving the pilot-stage
-finding that the default bridge count gave clustered too little degree
-variance to correlate reliably. Fully-connected topology, with no
-degree variance, showed no correlation by construction, as expected.
-
-The mixed population showed the same direction but weaker and noisier
-correlations (\ph{$r=0.31$ [0.18, 0.44]}, public goods;
-\ph{$r=0.68$ [0.55, 0.79]}, trust game) --- behavioural heterogeneity
-from self-interested agents partly, but not entirely, swamps the
-structural signal.
-
-\begin{figure}[htbp]
+\begin{figure}[ht]
 \centering
-\includegraphics[width=\textwidth]{figures/interaction_timeline_clustered.pdf}
-\caption{Cumulative referral pattern in the trust game over the course
-of a single clustered-topology run (colour = group membership; edge
-width proportional to the number of times a dyad has exchanged up to
-that round). In this replicate, referrals used within-group and
-inter-cluster bridge edges in close proportion to their availability
-(52\% of referrals on the 40 within-group edges, 48\% on the 40 bridge
-edges) rather than concentrating on either --- agents do not show a
-visible preference for same-group partners once a bridge connection is
-available to them.}
-\label{fig:temporal-clustered}
+\includegraphics[width=0.95\textwidth]{figures/topology_structural.pdf}
+\caption{The two non-null network topologies used in the main study
+($n=20$ agents): clustered (4 groups, 40 inter-cluster bridges,
+degree s.d.\ $=1.73$) and scale-free (preferential attachment,
+$m=2$, degree s.d.\ $=2.22$).}
+\label{fig:topology}
 \end{figure}
+
+Agents in the uniform-fair population took the prosocial action at
+markedly different rates across environments: a contribution rate of
+100.0\% in the public-goods game against referral rates of
+80.0--89.6\% in the trust game. The asymmetry matters for how the
+central claim reads: behaviour at ceiling occurs in the public-goods
+game, which is also where the structural effect is largely
+mechanically guaranteed (Section~4.2), while the trust game supplies
+the behavioural evidence at a lower rate. Neither environment alone
+carries the argument. Final payoffs nonetheless diverged sharply by
+network position in both. In scale-free topology, degree correlated strongly with
+cumulative net payoff in the public-goods game (mean within-run
+$r=0.973$, 95\% CI [0.968, 0.979] over 20 runs, sanctioning off) and
+comparably strongly in the trust game ($r=0.967$ [0.958, 0.976],
+8 runs).
+Gini coefficients were 0.538 [0.516, 0.560] and 0.526 [0.490, 0.561]
+respectively --- substantial inequality generated purely by network
+position despite, in the public-goods game, essentially perfect
+individual behaviour. With \texttt{inter-cluster-edges} raised to 40
+(Table~\ref{tab:h1}, Fig.~\ref{fig:topology}), clustered topology
+showed a comparably strong effect in the public-goods game
+($r=0.962$ [0.953, 0.970]), resolving the pilot-stage finding that the
+default bridge count gave clustered too little degree variance to
+correlate reliably; the trust game's clustered condition showed a
+real but substantially weaker effect ($r=0.337$ [0.188, 0.493]) ---
+degree still predicts payoff, but far less deterministically than in
+scale-free. Fully-connected topology, with no degree variance, showed no
+correlation by construction, though residual Gini there was
+non-trivial in the trust game (0.428--0.479) --- the dyadic mechanic
+generates payoff variance without any degree advantage to exploit.
+
+Round-level trajectories (Fig.~\ref{fig:timeline}) show this signature
+is near-immediate rather than accumulated: the public-goods
+correlation sits at its final value from round 1, and the trust
+game's rises from $0.839$ to $0.972$ by round 2 and remains
+essentially at that level for thirteen further rounds ($0.967$ at
+round 15) while raw inequality \emph{falls}
+(Gini $0.818 \rightarrow 0.526$). Structural position is close to
+fully determinative from the first interactions, which distinguishes
+this from cumulative-advantage accounts where prominence compounds
+over time.
+
+The mixed population showed a more environment-dependent pattern than
+anticipated. The structural effect survived heterogeneous disposition
+in both trust-game topologies ($r=0.700$ and $0.306$) and in
+scale-free public goods ($r=0.340$), but collapsed in clustered public
+goods ($r=0.095$ [$-0.011$, $0.200$], 20 runs). Behavioural
+heterogeneity does not weaken the structural signal uniformly; it can
+suppress it almost entirely in some topology--environment combinations
+while leaving it intact in others.
 
 \begin{table}[ht]
 \centering
-\caption{Degree--payoff correlation ($r$) by condition, scale-free
-topology. \ph{Placeholder values.}}
+\caption{Mean within-run degree--payoff correlation ($r$) and Gini
+coefficient by condition, sanctioning off. CIs are bootstrap
+percentile intervals resampling over runs (10,000 resamples). Three
+public-goods population $\times$ topology conditions were extended to
+20 runs (six cells in total, counting both sanctioning arms;
+Section~3.2); all others are at 8.}
 \label{tab:h1}
-\begin{tabular}{lccc}
+\begin{tabular}{lllccc}
 \toprule
-Environment & Population & $r$ [95\% CI] & Gini \\
+Environment & Population & Topology & runs & $r$ [95\% CI] & Gini [95\% CI] \\
 \midrule
-Public goods & uniform-fair & \ph{0.93 [0.89, 0.96]} & \ph{0.41} \\
-Public goods & mixed        & \ph{0.31 [0.18, 0.44]} & \ph{0.38} \\
-Trust game    & uniform-fair & \ph{0.97 [0.95, 0.99]} & \ph{0.55} \\
-Trust game    & mixed        & \ph{0.68 [0.55, 0.79]} & \ph{0.36} \\
+Public goods & uniform-fair & scale-free & 20 & 0.973 [0.968, 0.979] & 0.538 [0.516, 0.560] \\
+Public goods & uniform-fair & clustered  & 20 & 0.962 [0.953, 0.970] & 0.323 [0.298, 0.348] \\
+Public goods & mixed        & scale-free & 8  & 0.340 [0.220, 0.456] & 0.394 [0.380, 0.409] \\
+Public goods & mixed        & clustered  & 20 & 0.095 [$-$0.011, 0.200] & 0.423 [0.411, 0.435] \\
+Trust game    & uniform-fair & scale-free & 8  & 0.967 [0.958, 0.976] & 0.526 [0.490, 0.561] \\
+Trust game    & uniform-fair & clustered  & 8  & 0.337 [0.188, 0.493] & 0.367 [0.327, 0.407] \\
+Trust game    & mixed        & scale-free & 8  & 0.700 [0.617, 0.784] & 0.375 [0.325, 0.426] \\
+Trust game    & mixed        & clustered  & 8  & 0.306 [0.129, 0.483] & 0.288 [0.272, 0.305] \\
 \bottomrule
 \end{tabular}
 \end{table}
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{figures/referral_dynamics.pdf}
+\caption{Referral dynamics in the trust game, uniform-fair population,
+sanctioning off; one representative run per topology. Each panel shows
+referrals occurring \emph{within} the window indicated, not
+cumulatively: coloured edge width is proportional to referrals along
+that dyad in that window, grey lines are the underlying visibility
+graph, node size is degree. Values below each panel are cosine
+similarities between consecutive windows' referral vectors, averaged
+over all 8 runs in the cell. Scale-free referral structure reorganises
+once after round 1 and then holds ($0.46 \rightarrow 0.83 \rightarrow
+0.87$); clustered structure keeps reorganising to the end
+($0.23 \rightarrow 0.51 \rightarrow 0.69$), the condition in which the
+degree--payoff relationship is also weakest (Section~5).}
+\label{fig:referrals}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{figures/emergence_over_rounds.pdf}
+\caption{Round-level trajectories in the two central cells
+(uniform-fair $\times$ scale-free, sanctioning off), averaged over
+runs. \emph{Left:} Gini of cumulative payoff. \emph{Right:}
+degree--payoff correlation. The public-goods game sits at its final
+correlation from round 1, as its symmetric mechanic dictates; the
+trust game reaches its final level by round 2 and remains essentially
+there for
+thirteen further rounds, while raw inequality declines as early
+transaction sparsity resolves. Structural determination is thus
+near-immediate in both environments rather than cumulative --- degree
+does not become more predictive of payoff as advantage compounds; it
+is close to fully predictive from the first interactions.}
+\label{fig:timeline}
+\end{figure}
+
 \subsection{Isolating the LLM-specific component}
 
-Non-LLM baseline strategies (fixed, random) run through the identical
-mechanic produced correlations statistically indistinguishable from
-the real LLM data in several cells (e.g. public-goods, scale-free:
-baseline mean \ph{$r=0.95$} versus real \ph{0.93}) --- the raw
-correlation magnitude alone is close to a mechanically guaranteed
-property of the payoff structure once behaviour is uniform, not on its
-own an LLM-specific finding. The trust game's reciprocal (tit-for-tat)
-baseline is where a genuine, quantified LLM-specific effect appears:
-the real, reciprocity-aware LLM agents produced \emph{more} inequality
-(\ph{$r=0.97$}) than the simple non-LLM reciprocal heuristic
-(\ph{$r=0.64$}). The 68\% rate of awareness-of-reciprocity language
-(Section~4.3) and \ph{94--97\%} dyad-level mutual-reciprocation rate
-are real, but concentrate around already-well-connected pairs rather
-than functioning like the simple rule that would actually equalize
-outcomes.
+Non-LLM baselines were run through the identical mechanic and
+topologies at full scale (8 runs per cell) and compared against the
+real uniform-fair runs by two-sided permutation test (10,000
+shuffles) on the difference in mean within-run $r$
+(all cells in Supplementary Section~S8).
+
+The comparison separates two claims. First, the correlation magnitude
+alone is close to a mechanically guaranteed property of the payoff
+structure once behaviour is uniform: a \emph{fixed}-strategy bot,
+which does not reason at all, reproduces the real agents' public-goods
+correlation almost exactly (clustered: $0.960$ vs.\ real $0.962$,
+$p=0.77$; scale-free: $0.982$ vs.\ $0.973$, $p=0.09$). A high
+degree--payoff correlation is therefore not on its own evidence of
+anything LLM-specific --- a negative control a study reporting only
+its own agents' correlations would miss.
+
+Second, against that null, the trust game's reciprocal (tit-for-tat)
+comparison isolates a genuine behavioural effect: real agents produced
+substantially \emph{more} degree-linked inequality than the minimal
+reciprocal heuristic, in both topologies and both sanctioning arms
+(scale-free, sanctioning off: $r=0.967$ vs.\ $0.671$, $p=0.0001$;
+clustered: $0.337$ vs.\ $0.018$, $p=0.026$). Agents that visibly track
+reciprocity do not converge on the equalizing behaviour a minimal
+reciprocal rule produces; their reciprocity concentrates around
+already-well-connected partners. The \emph{fixed} baseline runs the
+opposite way here (scale-free: $0.982$ vs.\ $0.967$, $p=0.014$;
+clustered: $0.708$ vs.\ $0.337$, $p=0.0009$), mechanically cycling
+through neighbours yielding a \emph{cleaner} relationship by removing
+the targeting variance real agents introduce. Real behaviour is
+reducible to neither heuristic.
 
 \subsection{H2: self-report versus structural position}
 
-Awareness-of-position language was \ph{4\% [2, 7]} in the public-goods
-game versus \ph{64\% [58, 70]} in the trust game --- confirming the
-pilot-stage finding that this is mechanic-dependent, not a fixed
-property of the model, at main-study scale. Fairness-assertion
-language showed the inverse pattern (\ph{97\%} versus \ph{55\%}).
-Critically, in the trust game, awareness language did not correlate
-with an agent's actual structural advantage
-(\ph{$r=0.05$ [$-0.03$, 0.13]} against degree; \ph{$r=-0.06$} against
-net payoff) --- advantaged and disadvantaged agents talk about
-reciprocity at similar rates, and individually rational,
-situationally-aware adaptation by every agent still does not correct
-the population-level structural outcome.
+Every agent-round free-text justification from the full 264-run
+dataset was classified by LLM judge (59,440 unique texts,
+deduplicated from 75,822 recorded justifications; zero classification
+failures). This includes the 72 runs added later to sharpen the H1 and
+H3 estimates, which were reclassified under the same judge prompt as
+the balanced dataset, so the per-cell rates below rest on 8 runs per
+cell except in the three cells extended to 20.
+
+Two things about agents' stated reasoning are worth separating.
+Invoking the collective is near-universal and mechanic-independent:
+essentially every agent in both environments frames its choice in
+terms of the network, fairness or trust (100.0\% of public-goods
+justifications, 98.7\% of trust-game ones, human-coded). Referring to
+one's own concrete position --- naming a counterpart, a reciprocity
+history, one's own connectivity --- is not. That is confined almost
+entirely to the trust game: a stratified, human-adjudicated sample
+(148 items, two blind coders, third-party adjudication of
+disagreements) gives a calibrated prevalence of 38.4\%
+[18.8, 56.5] in the uniform-fair trust game against 0.0\%
+[0.0, 0.0] in the public-goods game. An LLM judge applied to all
+59,440 justification texts reproduces the same contrast on a broader
+criterion (68.9--81.4\% against 0.1--0.2\%; Supplementary
+Section~S5).
+What an agent appears to ``notice'' about its structural
+situation is thus a property of the interaction regime, not of the
+agent's disposition
+--- and the gap between environments is near-total on either measure.
+
+This awareness did not translate into corrected outcomes. To test that
+directly rather than by juxtaposition, per-agent awareness rates were
+correlated with final payoff controlling for degree, computed within
+each run and averaged across runs (5,280 agent-replicate observations
+over all 264 runs, one per agent and run; CIs bootstrapped over runs).
+In the confirmatory
+condition --- trust game, uniform-fair, scale-free --- the partial
+correlation is $-0.078$ [$-0.183$, $+0.024$]: awareness confers no
+measurable payoff advantage once network position is accounted for.
+
+Across the remaining cells the picture is mixed rather than uniformly
+null: small correlations of both signs appear ($+0.220$ clustered
+trust game, $-0.171$ mixed-population scale-free), none approaching
+the magnitude of the structural effect itself. The defensible claim is
+not that awareness is unrelated to outcome but that it is a weak and
+inconsistently-signed correlate of it while degree is a
+near-deterministic one. Awareness tracks disadvantage rather than
+advantage: it correlates $-0.184$ with degree, so the structurally
+worse-off agents talk about their position most.
 
 \subsection{Institutional sanctioning}
 
 Sanctioning, once actively cued in the round prompt, was exercised at
-similar rates in both environments (\ph{mean 14 sanctions per 20-agent
-run}, trust game; \ph{31}, public goods) and correctly targeted
-high-degree repeat non-reciprocators (mean degree of sanctioned agents
-\ph{1.8$\times$} the population mean, both environments). It did not,
-however, reduce Gini: sanctioning-on cells showed
-\ph{$\Delta$Gini $=+0.02$ [$-0.01$, 0.05]} relative to matched
-sanctioning-off cells, consistent with the pilot-stage finding that
-this sanctioning mechanic is symbolic (a reputation cost to the
-target) rather than economic (it does not touch the resource ledger
-that generates the inequality in the first place).
+rates varying widely by cell (0.1--1.4 sanctions per run in
+fully-connected and clustered trust-game cells, up to 24.0--38.5 in
+mixed-population public-goods cells; Supplementary Section~S9)
+and, where it was exercised
+more than negligibly, targeted high-degree agents in scale-free
+topology, where structural advantage is largest: in the three
+scale-free cells with a non-trivial number of sanctions, sanctioned
+agents averaged 1.59--2.08$\times$ the population mean degree, against
+roughly $1.0\times$ elsewhere. The fourth scale-free cell
+(uniform-fair public goods) is the exception noted below, where a
+single sanction across 20 runs gives a ratio of $0.54\times$ on which
+nothing rests.
+H3 was tested by bootstrap equivalence test
+against the pre-specified $\pm0.05$ practical-equivalence margin in
+the two confirmatory cells (uniform-fair $\times$ scale-free, both
+environments), as set out in Section~3.6; the remaining cells are
+descriptive.
+
+\textbf{H3 is confirmed in one of its two confirmatory cells and
+resolved in the other by a follow-up experiment.} In the trust game,
+$\Delta$Gini $=-0.003$, 95\% CI $[-0.049, +0.043]$ --- entirely inside
+the margin. In the public-goods game, $\Delta$Gini $=+0.046$, CI
+$[+0.012, +0.079]$ ($n=20$ per arm): the interval excludes zero and
+its upper bound exceeds the margin, so the pre-specified test resolves
+that cell neither way.
+
+The residual effect is not, however, produced by sanctioning. Agents
+in that cell issued \emph{one} sanction across all 20 runs:
+public-goods agents contributing at ceiling leave no free-riding to
+punish, so the two arms differ only in that one prompt mentions an
+option never exercised. We tested this directly by adding a third
+condition in which the identical prompt clause appears but the
+sanctioning endpoint is disabled at the backend, so every attempt is
+rejected. All three arms are compared at $n=8$ runs each --- the
+cue-only arm's own replicate count, matched by the first 8 runs of the
+no-cue and full-sanctioning arms --- so that arm means and differences
+rest on one basis. The cue alone reproduces the entire effect:
+cue-only Gini $0.606$ [$0.549$, $0.662$] against $0.532$
+[$0.511$, $0.553$] with no cue ($\Delta = +0.073$, CI
+$[+0.015, +0.127]$), while adding real sanctioning power on top of the
+cue changes nothing detectable ($0.576$ [$0.537$, $0.614$];
+$\Delta = -0.030$, CI $[-0.091, +0.036]$).
+Announcing a symbolic institution measurably
+shifts behaviour here; enforcing it adds nothing detectable.
+
+Across every cell, sanctioning never reduced inequality. Its
+main-effect share of variance in Gini is at or near zero throughout
+(Section~4.6), and no cell shows a negative $\Delta$Gini whose
+interval excludes zero. Where the institution was actually used ---
+the trust game, where non-reciprocation gives agents something to
+punish --- it correctly identified high-degree targets and left the
+distribution unchanged.
 
 \subsection{Cross-model robustness}
 
-On the strongest-signal condition (uniform-fair $\times$ scale-free,
-trust game), five independent model providers were compared at pilot
-scale (real pilot-stage numbers, not placeholders, though still below
-the main study's $\geq 8$-replicate standard for three of the five):
-DeepSeek $r=0.974$--$0.986$ (3 replicates), GPT-4o $r=0.986$--$0.992$
-(3 replicates), GLM-5.2 $r=0.923$--$0.945$ (2 replicates), Qwen (a
-284B/13B-active open-weight model, run both on a locally-hosted
-Qwen3-32B and via a hosted Qwen3.5-122b endpoint) $r=0.923$--$0.977$
-across 4 replicates, and Mistral-Large-3 $r=0.958$--$0.996$ across 10
-replicates. All five show a strong, clearly positive correlation,
-confirming H1 is not specific to a single model backend, architecture,
-or hosting arrangement. Unlike a scoped two-model check with
-near-identical numbers, this five-way comparison shows real,
-non-trivial magnitude variation between providers ($r$ ranging from
-the low 0.92s to 0.996) -- evidence that genuine model-level
-behavioural differences contribute to the effect size on top of the
-structural mechanism, not just noise around one shared value. The
-public-goods-game cross-model check remains to be run:
-\ph{$r=0.94$ [0.88, 0.98]} versus DeepSeek's \ph{0.93} is a
-placeholder pending that data.
+The strong degree--payoff relationship is not specific to one backend.
+Three further models from
+independent providers and architecture families (Qwen3.5-122b,
+GLM-5.2, Mistral-Medium-3.5) were run through the identical harness
+on the central uniform-fair $\times$ scale-free, sanctioning-off cells
+in both environments, at the main study's replicate standard of 8 runs
+each. All four models land in
+$r=0.95$--$0.99$ across both environments (Supplementary
+Section~S11). These runs probe the central structural effect only:
+they do not test the full factorial design on the additional backends,
+and therefore do not establish that the disposition--topology
+inversion of Section~4.6 generalizes across model families
+(see Limitations).
+
+The informative contrast is between individual behaviour and
+collective outcome. Trust-game referral rates vary by 16.2 percentage
+points across backends (DeepSeek 83.8\%, GLM 96.6\%, Qwen 99.9\%,
+Mistral 100.0\%) while the degree--payoff correlation varies by less
+than $0.03$. Mistral referred in 2,399 of its 2,400 agent-rounds;
+DeepSeek kept the resource in 386 of 2,400, typically citing
+network-level fairness as its reason. The residual agent-rounds in
+each cell resolve to neither action --- one for Mistral, two for
+DeepSeek --- and are recorded as such rather than dropped
+(Supplementary Section~S7). These are visibly different
+agent populations producing the same structurally determined outcome.
+Raising the rate at which agents individually do the prosocial
+thing --- the lever an individual-system regime can actually pull ---
+did not move the collective result in any of the four model families
+tested.
 
 \subsection{Variance decomposition}
 
-The mixed-effects model attributed more outcome variance to topology
-than to alignment population (\ph{topology: 46\%; alignment: 11\%;
-institution: 4\%; residual: 39\%} of explained variance in the
-degree--payoff correlation magnitude, pooled across environments) ---
-the direct empirical form of this paper's central claim: structural
-factors dominate individual-alignment factors in determining
-collective outcome.
+Variance was partitioned by closed-form fixed-effects ANOVA over cell
+and marginal means (Section~3.7), computed on the first 8 runs of
+every cell so that the design is fully balanced (Section~3.2); the
+rationale and the full table are given in Supplementary
+Section~S10.1. This decomposition is the paper's core evidence for
+interaction-regime dependence.
+
+It yields a result more consequential for governance
+than anticipated. There is no stable ranking of alignment against
+structure: \emph{which factor dominates is itself a property of the
+interaction regime} (Supplementary Table~S4). Every share below
+carries a percentile bootstrap interval obtained by resampling
+replicates within each cell and rerunning the same decomposition on
+each draw (10,000 resamples; Section~3.7). For the degree--payoff
+correlation, the public-goods game is population-dominated
+(population 85.5\% [80.0, 91.2] against topology 2.6\% [0.8, 5.4])
+while the trust game inverts this almost exactly (topology 55.7\%
+[45.0, 67.4] against population 9.8\% [3.4, 20.0]). The inversion does
+not rest on point estimates alone: in both environments the two
+intervals are disjoint, and in opposite directions. For Gini, the
+trust game splits roughly evenly between population (35.9\%
+[26.5, 46.7]) and topology (32.9\% [22.9, 44.6]), while in the
+public-goods game a population $\times$ topology interaction is the
+largest single term (41.3\% [23.0, 56.1]), though its interval
+overlaps that of the topology main effect (19.3\% [8.9, 29.1]) and it
+therefore exceeds either main effect as a point estimate rather than
+separably.
+
+Same model, same personas, same topologies: moving the population from
+the symmetric contribution environment to the targeted dyadic one
+reverses which factor explains the outcome. The two environments differ in coupled
+properties beyond the mechanic itself --- payoff arithmetic,
+neighbourhood versus dyadic scope, the role of reciprocity
+(Section~3.1) --- so what this establishes is dependence on the
+interaction regime as a whole, not an attribution to any single
+isolated property of it. The governance consequence is unchanged by
+that caveat, and it removes the natural fallback
+position for a single-system conformity regime: if structure reliably
+dominated, a regulator could certify structures instead, auditing
+topology to bound inequality; if disposition reliably dominated,
+per-model certification would suffice. The data show neither, so no
+fixed certification target can be presumed adequate in advance of
+knowing how the agents will be made to interact.
+
+Two findings are robust across all four decompositions. Sanctioning's
+main-effect share is at or near zero throughout (0.0--0.4\%),
+corroborating the H3 result; and in none does individual alignment
+account for outcomes on its own --- either topology dominates
+outright, or the two interact too strongly to separate.
 
 %%---------------------------------------------------------------------
 \section{Discussion}
 %%---------------------------------------------------------------------
 
-Individually uniform, fully compliant behaviour --- the condition an
+Uniform prosocial behaviour at or near ceiling --- the condition an
 individual-system conformity regime is built to certify --- still
 produced large, structurally determined, unequal outcomes in both
-environments tested. Comparison against non-LLM baselines shows part
-of this is close to graph-theoretically guaranteed once behaviour is
-uniform, which is itself part of the point: the failure is
-institutional and structural, not a property of any agent's
-disposition, however perfectly aligned. Where the finding is
-genuinely LLM-specific --- the trust game's reciprocal-baseline
-comparison, and the mechanic-dependent awareness-without-correction
-gap in Section~4.3 --- it shows that situational awareness, even
-extensive and specific awareness, is not sufficient either: agents
-that visibly track reciprocity and adapt their targets still finish
-the game in a structurally determined position, and a real
-institutional mechanism that correctly identifies the agents
-responsible does not, in this design, have the economic teeth to fix
-what it identifies.
+environments. The non-LLM baselines show part of this is close to
+graph-theoretically guaranteed once behaviour is uniform, which is
+itself part of the point: the failure is structural, not a property of
+any agent's disposition.
 
-Taken together, these results speak against three candidate
-correctives, each individually plausible, each insufficient alone:
-uniform individual alignment (Section~4.1), agent-level situational
-awareness (Section~4.3), and a real, correctly-targeted institutional
-sanction (Section~4.4). None closes the aggregate gap. This is the
-paper's central governance implication: a regulatory framework that
-certifies individual system conformity --- the AI Act's actual
-mechanism --- would certify every agent in this population as
-compliant, at every level tested, while the collective outcome
-remained substantially unequal throughout. The gap is not a
-enforcement failure at the individual level; it is a blind spot in
-what individual-level certification can see at all.
+The awareness result is the sharpest form of this. Awareness of a
+structural problem, distributed across every individual in a
+population, is not the same thing as any individual being able to act
+on it: in the condition where most justifications referenced
+the agent's own position, awareness carried no payoff advantage once
+position was controlled for (Section~4.3).
 
-\textbf{Limitations.} These are simulated, not deployed, agent
-populations, and the specific network-scoped local-payoff formula is
-one reasonable operationalization of ``structural access advantage,''
-not the only one. The cross-model check (Section~4.5) covers five
-backends on one scoped condition (uniform-fair $\times$ scale-free,
-trust game only), not a full per-model replication of the entire
-factorial design across both environments -- three of the five
-backends have only 2--3 replicates rather than the main study's
-$\geq 8$. The H2 classification, while validated three ways (keyword,
-LLM-judge, human coding; Section~3.4), rests on a coding scheme fixed
-by the investigators; an independent replication with a differently-
-constructed rubric would strengthen the claim further.
+Read together, the three correctives that fail here map onto the
+components a coordination-layer governance architecture is built
+from. \citet{Bohr:2026:Coordination} proposes monitoring interaction and providing
+intervention hooks; the results locate where each stops short.
+Awareness is observability without control: agents in the trust game
+saw and articulated their position, and the population-level outcome
+was unaffected (Section~4.3). Sanctioning is intervention without
+causal leverage: the institution identified the structurally
+advantaged agents correctly and left the distribution that made them
+advantaged untouched (Section~4.4). Uniform disposition is the
+component-level guarantee itself, held at ceiling to no effect
+(Section~4.1). Observing a coordination problem and being able to act
+somewhere in the system are both necessary; neither is sufficient
+without leverage over the mechanism that generates the outcome.
+
+This is where our result and \citet{BracaleSyrnikov:2026:Collusion} agree from
+opposite directions. In their Cournot markets a regime with
+enforceable consequences substantially reduces collusion while a
+prompt-only prohibition does not bind at all. Our sanction sits on the
+prompt-only side: it is reputational, and the cue-only experiment
+shows the announcement carries whatever effect there is. The
+conclusion is not that institutional governance fails, but that an
+intervention may correctly identify the agents responsible and still
+change nothing if it does not reach the mechanism generating their
+advantage --- here, the resource ledger rather than the reputation
+ledger.
+
+The governance implication needs care. This study does not show that
+these agents would pass a legal conformity assessment; following a
+fairness persona is not legal conformity. The claim concerns the
+\emph{unit} of assessment rather than its stringency. An assessment
+confined to each agent independently --- however demanding --- could
+not detect the effect shown here: every agent-level property it might
+examine is held constant across conditions that differ substantially
+in collective outcome, so it has no variable to bind on.
+
+Stated formally, the implicit step is one of \emph{compositional
+assurance}: that establishing agent-level conformity $C$ for every
+component suffices to establish a collective property $F$ of the
+system they form,
+\[
+\textstyle\bigwedge_{i=1}^{n} C(a_i) \;\Rightarrow\;
+F\!\left(I(a_1,\dots,a_n)\right).
+\]
+$C$ and $F$ sit at different levels: $C$ is an agent-level behavioural
+guarantee --- conformity to a fairness norm, evaluable on one agent
+--- approximated here by the observed prosocial-action rate, which in
+the trust game is a lower bound on persona-consistency rather than a
+direct measure of it (Section~3.2); $F$ is a distributional property
+no agent can satisfy or violate
+alone. Write the interaction regime as $I = (A, T, M, G)$: agent
+dispositions, topology, mechanic, governance.
+
+Our results are a counterexample to the unconditional implication.
+Holding every $C(a_i)$ at or near ceiling leaves $F$ free to vary with
+$I$ alone. This is not news to compositional verification, where
+component guarantees have long been understood to hold only relative
+to explicit assumptions about each component's environment
+\citep{Henzinger:1998:Assume}. The productive form of the claim is therefore
+the assume-guarantee one,
+\[
+\Bigl[\textstyle\bigwedge_{i=1}^{n} C(a_i)\Bigr] \wedge A(I)
+\;\Rightarrow\; F\!\left(I(a_1,\dots,a_n)\right),
+\]
+with $A(I)$ the conditions on the interaction regime under which
+agent-level conformity does compose. The open question is not whether
+composition works, but \emph{which assumptions on $I$ it requires} ---
+and our results bear directly on how hard that question is.
+
+They show, first, that $F$ is not a function of $A$ or $T$ separately
+in either of our environments but of the regime as a whole,
+$F = f(A,T,M,G)$; and second, more restrictively, that even the
+relative weight of $A$ and $T$ changed with $M$
+(Section~4.6). Any candidate $A(I)$ quantifying only over agents, or
+only over topology, therefore cannot be presumed adequate in advance
+of knowing the mechanic --- which also closes off the obvious repair
+for an individual-system blind spot, certifying the structure instead.
+Recent frameworks correctly identify the coordination layer as the
+governance target \citep{Bohr:2026:Coordination,Pierucci:2026:Institutional}; these results add
+that the layer is not homogeneous, and its internal causal structure
+must be identified before an intervention can be aimed at it.
+
+\textbf{An unresolved anomaly.} One condition resists this account: in
+clustered topology the trust game shows only a weak degree--payoff
+relationship ($r=0.337$, against $0.967$ in scale-free), and its
+referral structure never stabilises (Fig.~\ref{fig:referrals}). We
+report it as an open question; the supporting measurements and a
+testable conjecture are set out in Supplementary Section~S10.2.
+
+The claim these results support can be stated compactly. Agent-level
+conformity does not compose unconditionally into collective fairness:
+holding every agent's prosocial behaviour at or near ceiling leaves
+the collective outcome free to vary with the interaction regime alone.
+That much is a counterexample to an inference assurance regimes make
+implicitly. What makes it hard to repair is the second half:
+\emph{collective assurance cannot generally be assigned to a fixed
+level of the system in advance; the appropriate target depends on the
+interaction regime and its causal structure.}
+
+\textbf{Limitations.} These are simulated agent populations, and the
+network-scoped payoff formula is one reasonable operationalisation of
+structural access advantage rather than the only one. The two
+environments differ in several coupled properties --- payoff
+arithmetic, neighbourhood versus dyadic scope, the role of reciprocity
+--- so the design identifies dependence on the interaction regime; it
+does not isolate which property of the regime carries the inversion,
+and it establishes a counterexample to unconditional compositional
+assurance rather than an impossibility theorem extending beyond the
+regimes tested. The cross-model
+evidence covers four architectures but only the two central cells, so
+whether the environment-dependence in Section~4.6 also holds across
+backends is untested. The H2 measure characterises what agents
+\emph{say} about their position: free-text justifications are not
+guaranteed to reflect the computation that produced the action, only a
+plausible narration of it \citep{Turpin:2023:Unfaithful}, and prevalence estimates
+depend on a classification scheme whose validation we report in
+Supplementary Section~S5.
 
 %%---------------------------------------------------------------------
 \section*{Data availability}
 %%---------------------------------------------------------------------
-Code, configuration, and exported round-level data will be released
-alongside submission.
+Code, configuration, and exported round-level data are publicly
+available at
+\url{https://github.com/Entropy-Hackers/collective-AI-assurance}.
+Full persona and round-prompt text, tool
+schemas, non-LLM baseline strategy definitions, the H2 classification
+pipeline, topology generation, and model/API configuration for every
+backend tested are provided in the Supplementary Information.
+
+\section*{Use of large language models}
+Large language models were used as a tool in this work: for
+implementing the simulation harness and analysis code, for computing
+reported statistics, and for drafting and revising manuscript text.
+All experimental design decisions, all interpretations of results, and
+all claims made in this paper were determined and verified by the
+authors, who reviewed every generated output and take full
+responsibility for the content. Large language models are not authors
+of this work. Their use as the experimental subject of the study, as
+distinct from their use as a tool, is described in Section~3.
 
 \section*{Competing interests}
 The authors declare no competing interests.
 
 \section*{Funding}
-\ph{TBD.}
+This work was supported under grant \doilink{10.55776/P32554} (Explainable Artificial
+Intelligence) by the Austrian Science Fund (FWF).
+
+
+\section*{Acknowledgements}
+Model inference for the experiments reported here was carried out on
+infrastructure provided by e-INFRA CZ.
 
 \section*{Author contributions}
-\ph{TBD.}
+H.M. conceived the study, coordinated it, and drafted the manuscript.
+H.M. and A.H. developed the conceptual framework. M.P. implemented the
+simulation and performed the analysis. A.H. reviewed and edited the
+manuscript. All authors approved the final version.
 
 %%---------------------------------------------------------------------
-\begin{thebibliography}{99}
-\setlength{\itemsep}{0.25em}
-\raggedright
-
-\bibitem[Schmidgall et al.(2026)]{agentclinic2026}
-Schmidgall S, Ziaei R, Harris C, Kim JW, Reis EP, Jopling J, Moor M
-(2026) AgentClinic: a multimodal benchmark for tool-using clinical AI
-agents. npj Digital Medicine 9(1):499. \doilink{10.1038/s41746-026-02674-7}
-
-\bibitem[Ashery et al.(2025)]{ashery2025}
-Ashery AF, Aiello LM, Baronchelli A (2025) Emergent social conventions
-and collective bias in LLM populations. Science Advances 11(20):eadu9368.
-\doilink{10.1126/sciadv.adu9368}
-
-\bibitem[Athni(2026)]{athni2026}
-Athni TS (2026) Emerging risks of AI-to-AI interactions in health care:
-lessons from Moltbook. Journal of Medical Internet Research 28(1):e96199.
-\doilink{10.2196/96199}
-
-\bibitem[Berg et al.(1995)]{berg1995}
-Berg J, Dickhaut J, McCabe K (1995) Trust, reciprocity, and social
-history. Games and Economic Behavior 10(1):122--142.
-
-\bibitem[de Arruda et al.(2026)]{collectivecooperation2026}
-de Arruda HF, Lázaro CG, Aleta A, Moreno Y (2026) Collective
-cooperation without individual fidelity in LLM agents. Preprint at
-arXiv:2606.30454.
-
-\bibitem[De Marzo et al.(2026)]{conformitymisalignment2026}
-De Marzo G, Bellina A, Castellano C, Priesemann V, Garcia D (2026)
-Conformity generates collective misalignment in AI agents societies.
-Preprint at arXiv:2605.10721.
-
-\bibitem[Fehr and G\"achter(2000)]{fehr2000}
-Fehr E, G\"achter S (2000) Cooperation and punishment in public goods
-experiments. American Economic Review 90(4):980--994.
-
-\bibitem[Fehr and G\"achter(2002)]{fehr2002}
-Fehr E, G\"achter S (2002) Altruistic punishment in humans. Nature
-415(6868):137--140.
-
-\bibitem[Han et al.(2025)]{han2025}
-Han J, Battu B, Romić I, Rahwan T, Holme P (2025) Static network
-structure cannot stabilize cooperation among large language model
-agents. PLOS One 20(5):e0320094. \doilink{10.1371/journal.pone.0320094}
-
-\bibitem[Qiu(2025)]{networkgames2026}
-Qiu X (2025) NetworkGames: simulating cooperation in network games
-with personality-driven LLM agents. Preprint at arXiv:2511.21783.
-
-\bibitem[Obermeyer et al.(2019)]{obermeyer2019}
-Obermeyer Z, Powers B, Vogeli C, Mullainathan S (2019) Dissecting
-racial bias in an algorithm used to manage the health of populations.
-Science 366(6464):447--453. \doilink{10.1126/science.aax2342}
-
-\bibitem[Zhang and Krishnamurthy(2026)]{preferentialattachment2026}
-Zhang Y, Krishnamurthy V (2026) Emergence of preferential attachment
-and glass-ceiling effects in autonomous networks of LLMs. Preprint at
-arXiv:2607.01148.
-
-\end{thebibliography}
+\bibliographystyle{plainnat}
+\bibliography{references}
 
 \end{document}
+
+% REVISION V3: log of substantive changes relative to manuscript_v2.tex
+% (ordinary copy-editing is not recorded).
+%
+% REVISION V3: Title retained unchanged. Rationale: the title's claim is
+% a strategy-level one --- that an assurance scheme fixing its target at
+% agents alone or at network structure alone cannot be relied on --- and
+% the paper supports it as a counterexample result: agent-level
+% guarantees at ceiling left collective outcomes unconstrained in both
+% environments, and the disposition/topology inversion defeats any fixed
+% structural target chosen in advance. The abstract, Section 4.6 and the
+% Discussion now carry the precise scope ("cannot generally be
+% assigned", regime-dependence rather than a universal impossibility
+% theorem), so the title does not overstate the evidence.
+%
+% REVISION V3: Moderated universal/causal language throughout.
+% Abstract: "exactly reproduces" -> "reproduces ... almost exactly"
+% (matching Section 4.2); "inverts between environments, driven by the
+% mechanic alone" -> "inverts between the two interaction regimes, with
+% model, personas and topologies held identical"; final sentence now
+% "cannot generally be assigned ... depends on the interaction regime
+% and its causal structure". Introduction: central-result sentence and
+% Contribution (4) now state regime dependence ("varies with the
+% interaction regime", "no fixed assurance target can be presumed
+% adequate in advance") instead of "is itself a property of the
+% interaction mechanic" / "no fixed assurance target is adequate".
+% Section 4.6: "property of the interaction mechanic" -> "property of
+% the interaction regime"; added explicit statement that the two
+% environments differ in coupled properties beyond the mechanic, so the
+% result establishes regime dependence rather than attribution to the
+% mechanic in isolation; "no fixed certification target is adequate" ->
+% "can be presumed adequate". Discussion: "is not a function of A or T
+% separately in any environment-independent sense" -> "in either of our
+% environments"; "the relative weight of A and T is itself a function of
+% M" -> "changed with M"; "is therefore inadequate in advance" ->
+% "cannot be presumed adequate in advance"; closing claim now "cannot
+% generally be assigned to a fixed level of the system in advance".
+% Section 3.1 now names the coupled regime properties once, so later
+% caveats can reference them.
+%
+% REVISION V3: Dataset accounting for H2 (Section 4.3). The balanced
+% 192-run corpus is now described consistently as 55,238 recorded
+% justifications deduplicating to 46,157 unique texts. The unverifiable
+% "all 59,440 justification texts" was replaced by "the full
+% justification corpus" and flagged with an AUTHOR CHECK comment (the
+% figure exceeds the 192-run corpus and is not derivable from any
+% dataset enumerated in the sources); the corresponding figure in
+% Supplementary Section S12 is flagged identically. No number was
+% invented or altered.
+%
+% REVISION V3: Adaptive replication (Section 3.2). The 8->20 extension
+% is now described as an explicit, precision-motivated sample-size
+% decision taken after the initial 8-run estimates were computed, always
+% applied to both sanctioning arms of a condition; the text now states
+% which analyses use the balanced first-8-runs subset (variance
+% decomposition, all H2 results) versus all runs (H1, H3), and states
+% that prespecification was internal and the study was not preregistered
+% (also noted in Section 3.6). No stopping rule beyond the disclosed
+% extension was invented.
+%
+% REVISION V3: Variance decomposition (Section 4.6) framed explicitly as
+% the paper's core evidence for interaction-regime dependence; balanced
+% first-8-runs basis cross-referenced to Sections 3.2 and S10.1;
+% "Supplementary Table S3" corrected to S4 (table numbering in the
+% revised supplement); AUTHOR CHECK added on the absence of uncertainty
+% estimates for the variance shares (none invented).
+%
+% REVISION V3: Cross-model claim sharpened (Section 4.5, Abstract,
+% Limitations). Scope now explicit: three additional backends on the
+% central uniform-fair x scale-free sanctioning-off cells only; the text
+% states this does not establish that the factorial inversion
+% generalizes across model families. The strength of the finding
+% (16.2-point behavioural range vs. <0.03 correlation range) is
+% retained; abstract's "near-identical structural inequality" ->
+% "near-identical degree-linked inequality".
+%
+% REVISION V3: Sanctioning (Section 4.4). Sanctions-per-run ranges
+% aligned to Supplementary Table S3 (0.1--1.4 and 24.0--38.5, replacing
+% 0.1--0.8 and 24--40.5) with an AUTHOR CHECK; AUTHOR CHECK added
+% requesting the cue-only arm's run count and its inclusion in the S12
+% data inventory, and flagging that the quoted cue-experiment cell means
+% and differences are mutually inconsistent unless computed on matched
+% balanced subsets (no number altered); degree-ratio values flagged as
+% untabulated in the SI. Interpretive sentence now "Announcing a
+% symbolic institution measurably shifts behaviour here; enforcing it
+% adds nothing detectable", preserving the narrow reputational-sanction
+% scope stated in H3.
+%
+% REVISION V3: Provenance header. The v2 "read-as-real /
+% placeholder-extrapolation" header was replaced by an AUTHOR CHECK
+% requiring confirmation that all values are final computed values; the
+% unused \ph placeholder macro was removed.
+%
+% REVISION V3: Post-audit corrections (independent consistency audit,
+% 2026-08-18). (a) H2 awareness-payoff analysis: the v2 parenthesis
+% "5,280 agent-replicate observations over all 264 runs" contradicted
+% the statement that the 72 extension runs were never classified; the
+% count was removed from the text and flagged with an AUTHOR CHECK
+% (Section 4.3). (b) Supplementary S5 gained a short subsection
+% describing the 148-item calibration sample and the LLM-judge
+% prevalence contrast, so that the main text's pointer to S5 for these
+% figures resolves; an AUTHOR CHECK asks for the per-cell prevalence
+% table from the exports. (c) AUTHOR CHECKs added for: the "8 runs per
+% side" caption of Supplementary Table S2 versus 20-run real-arm
+% values; the fully-connected commons Gini anomaly (0.119 vs 0.000
+% under identical 100% behaviour) and the 0.1-sanctions-per-run
+% rounding in Supplementary Table S3; the 2,399/2,398-of-2,400
+% agent-round denominators in Section 4.5; the S5 classification-filter
+% description whose arithmetic conflicts with the 55,238 corpus count;
+% and the corresponding-author mailto/display address mismatch.
+% (d) Residual mechanic-attribution wording changed to
+% environment/regime wording in Contribution (2), Section 4.3
+% ("property of the interaction regime"), and Section 4.6 ("moving the
+% population from the symmetric contribution environment to the
+% targeted dyadic one"). (e) Abstract: "is untested" -> "has not been
+% experimentally decomposed"; the 84-100% range is now explicitly
+% labelled as the cross-model range. (f) The EU AI Act (already in the
+% bibliography) is now cited alongside Dafoe 2018 for the claim about
+% existing regulation assigning conformity obligations to identifiable
+% systems and providers. (g) Round-2 trajectory wording no longer
+% implies the correlation "holds" exactly at 0.972 (final value 0.967
+% now stated). (h) Supplement title page gained the affiliation block;
+% Table S4 caption now states that omitted interaction terms mean rows
+% need not sum to 100%.
+%
+% REVISION V3: Bibliography. references.bib rebuilt in Holzinger style
+% (labels Lastname:Year:Keyword, alphabetical, letter dividers); all
+% DOIs verified against CrossRef/OpenAlex/arXiv on 2026-08-18; citation
+% keys updated throughout. Corrections found during verification:
+% Sarkar & Faik author names corrected (Atrisha Sarkar, Isam Faik ---
+% v2 had "Advait Sarkar and Isabel Faik"); Bohr 2026 now cited with its
+% published DOI/volume/pages (AI & Society 41(5):4767--4777,
+% 10.1007/s00146-026-02853-w); Sheng et al. 2026 completed with volume
+% and pages; Dafoe research agenda year corrected to 2018 (in-text
+% citation year changes accordingly); Qiu NetworkGames year is 2025
+% (arXiv 2511.21783); Pierucci et al. author list completed to the nine
+% authors on the arXiv record; Tomasev et al. author list completed;
+% missing DOIs added for Berg et al. 1995, Fehr & Gaechter 2000/2002.
+% Bibliography style switched from apalike to plainnat + doi package so
+% every DOI is a clickable hyperlink in the compiled PDF; no reference
+% was added or removed.
+%
+%%=====================================================================
+% REVISION V4: verification pass against the released data exports at
+% https://github.com/Entropy-Hackers/collective-AI-assurance. Every
+% AUTHOR CHECK left open in v3 was resolved against the exports and the
+% analysis scripts, except the corresponding-author address, which is
+% not a data question and remains flagged at the title block. No value
+% was changed without recomputation from the exports; where a v3 value
+% survived verification unchanged it is not listed here.
+%
+% REVISION V4 (a) H2 corpus (Section 4.3, Supplement S5 and S12). The
+% 46,157 / 55,238 figures describe the older 192-run subset; the
+% classification actually released covers the full 264-run dataset
+% (h2_full_results_v2.md, h2_per_agent.csv), giving 59,440 unique texts
+% deduplicated from 75,822 recorded. The v3 claim that the 72 extension
+% runs were not reclassified is withdrawn: they were, under the same
+% judge prompt. The per-cell rates quoted in the main text (68.9-81.4%
+% against 0.1-0.2%) come from that full corpus and are now tabulated in
+% the supplement.
+%
+% REVISION V4 (b) Awareness-payoff analysis (Section 4.3). The v2 count
+% of 5,280 agent-replicate observations over 264 runs is correct and
+% has been restored: h2_per_agent.csv contains exactly 5,280 rows and
+% h2_vs_structure.md computes the partial correlations from them. The
+% v3 doubt rested on the withdrawn premise in (a).
+%
+% REVISION V4 (c) Cue-only experiment (Section 4.4). All three arms are
+% now reported at n=8 -- the cue-only arm's own replicate count, matched
+% by the first 8 runs of the other two -- so that arm means and
+% differences share one basis, which they did not in v3. Recomputed
+% from the exports with the repository's own bootstrap routine: off
+% 0.532 [0.511, 0.553], cue-only 0.606 [0.549, 0.662], on 0.576
+% [0.537, 0.614]; delta cue-off +0.073 [+0.015, +0.127], delta on-cue
+% -0.030 [-0.091, +0.036]. Both conclusions are unchanged. The v3
+% values (0.538 / +0.081 / -0.044) mixed a 20-run arm mean with 8-run
+% differences. The cue-only dataset is now listed in the S12 inventory.
+%
+% REVISION V4 (d) Sanctioning and degree ratios (Section 4.4,
+% Supplement Table S3). The v3 ranges (0.1-1.4 and 24.0-38.5) are
+% confirmed against results_summary.md. The degree-ratio column the v2
+% caption promised has been restored to Table S3 from the exports, so
+% the main text's 1.59-2.08x now has a tabulated source. That claim is
+% narrowed: the fourth scale-free cell (uniform-fair public goods) has
+% a ratio of 0.54x, resting on the single sanction issued in that cell,
+% and is now stated as the exception rather than left implicit.
+%
+% REVISION V4 (e) Cross-model denominators (Section 4.5). The 2,399 and
+% 2,398 figures were not recording gaps: the harness records a third
+% outcome for agent-rounds resolving to neither action (one for
+% Mistral, two for DeepSeek). Denominators corrected to 2,400 with the
+% convention stated.
+%
+% REVISION V4 (f) Variance decomposition (Section 4.6, Supplement
+% S10.1). Bootstrap intervals now exist and are reported: 95%
+% percentile intervals over 10,000 resamples, replicates drawn within
+% cell, the same closed-form decomposition rerun per draw. Point
+% estimates are unchanged. Two consequences for the text: the
+% disposition-topology inversion is strengthened, since the population
+% and topology intervals are disjoint in both environments and in
+% opposite directions; and the public-goods Gini claim is qualified,
+% since the population x topology interval [23.0, 56.1] overlaps the
+% topology main effect's [8.9, 29.1], making it the largest term as a
+% point estimate but not separably so.
+%
+% REVISION V4 (g) Supplement corrections found during verification.
+% The S5 round-filter gloss was wrong, not the counts: all rounds are
+% classified, including the first, which carries no last_round
+% feedback. The Table S2 caption's "8 runs per side" holds only for the
+% baseline arm; the real arm uses all available runs, which is 20 in
+% the four extended public-goods cells. The two Table S3 anomalies are
+% real and are now explained rather than flagged: the fully-connected
+% Gini of 0.119 arises from one agent omitting one contribution in one
+% of eight runs, which the shift-to-non-negative Gini turns into a
+% single run at 0.95, and the 0.1 sanctions per run is one sanction
+% across 20 runs displayed at one decimal.
+%
+% REVISION V4 (h) Discrepancy for the authors to resolve in the
+% repository, not in this manuscript: variance_and_h3_results.md
+% reports the confirmatory public-goods H3 effect as +0.0435
+% [+0.0044, +0.0857], while stats_main_study.py itself returns +0.0460
+% [+0.0124, +0.0791] on the released exports, matching the value in
+% this manuscript. The script output has been taken as canonical here;
+% the markdown file predates the n=20 extension and should be
+% regenerated so the repository does not contradict itself.
+%
+% REVISION V4 (i) Citation scope, Athni 2026 (Introduction). The v3
+% sentence claimed health systems "already run agentic AI for referral
+% preparation, discharge coordination and scheduling, with human review
+% reserved for high-stakes decisions rather than every step". The cited
+% source supports semi-autonomous deployment for administrative and
+% coordination tasks (preliminary triage, appointment scheduling,
+% operating-room coordination) and describes more autonomous medical
+% agents as largely still in development or pilot stages; it does not
+% support referral preparation, discharge coordination, or the claim
+% about the scope of human review. The sentence has been narrowed to
+% what the source states, and a following clause makes explicit that
+% the deployed coordination layer is the layer this paper concerns, so
+% that the narrowed claim still carries the "not hypothetical" point.
+%
+% REVISION V4 (j) Citation scope, Obermeyer et al. 2019 (Section 2.2).
+% The v3 sentence attributed to that study the claim that the bias it
+% documents had "no culpable actor anywhere in the pipeline". That is
+% a normative claim about responsibility attribution, which the study
+% neither makes nor tests; what it establishes is that health-care
+% costs used as a proxy for health need produced racial disparities in
+% allocation. The sentence now states the proxy mechanism and draws
+% the narrower inference the paragraph actually needs -- that
+% distributional bias can arise from system design without
+% discriminatory decisions at the point of allocation.
+%
+% REVISION V4 (k) Conceptual scope, Dwork et al. 2012 (Section 2.4).
+% The v3 text stated that "every agent satisfies an
+% individual-fairness-like criterion by construction". That asserts
+% satisfaction of a technical constraint the design does not establish:
+% Dwork et al.'s individual fairness is a Lipschitz condition on a
+% classifier's outputs relative to a task-specific similarity metric,
+% whereas the uniform-fair condition gives every agent the same
+% fairness-oriented persona. Persona uniformity is a property of the
+% inputs, not a verified property of behaviour. The passage now
+% disclaims the formal criterion explicitly and states the design
+% property actually held -- identical disposition across agents, with
+% inequality measured at population level. The paper's claim is
+% unaffected, since it rests on uniformity of disposition rather than
+% on any component-level fairness guarantee; Section 3.5 already
+% defines the normative criterion in use.
+%
+% REVISION V4 (l) Citation removed, Holzinger et al. 2020 (Section 3.4).
+% The v3 text likened the classifier validation to "structured scales
+% for judging explanation quality against human raters" and cited the
+% System Causability Scale. The bibliographic entry is correct, but
+% that work develops a scale for rating the quality and causability of
+% explanations; it is not a method for validating an automated
+% classifier against human coders, so the analogy did not support the
+% methodological point. The clause and the citation have been removed.
+% The validation claim is unchanged and continues to rest on the
+% reported kappa values against the Landis-Koch benchmark. The entry
+% remains in references.bib but is now uncited.
+%
+% REVISION V4 (m) Citation removed, Dafoe 2018 (Introduction). The
+% claim that existing regulation assigns conformity obligations to
+% identifiable systems and providers was cited to the EU AI Act and to
+% Dafoe 2018 jointly. The latter is a general AI-governance research
+% agenda published six years before the Regulation and is not a source
+% for concrete conformity obligations; the AI Act alone supports the
+% claim. Per the % REVISION V3 (f) note above, Dafoe was the original
+% citation here and the AI Act was added beside it rather than in
+% place of it -- this completes that correction. The entry remains in
+% references.bib and is now uncited; it would sit naturally in
+% Section 2.3 if a general governance-agenda reference is wanted there.
+%
+% REVISION V4 (n) Mechanism scope, Fehr and Gaechter 2000/2002
+% (Section 3.2). The v3 text described the institution factor as peer
+% sanctioning "per" those studies. Both entries are bibliographically
+% correct, but the mechanism implemented here is not the costly-
+% punishment paradigm they establish: in Fehr and Gaechter, punishment
+% reduces the target's payoff, whereas a sanction here lowers the
+% target's reputation only and leaves the resource ledger untouched --
+% which is precisely what H3 and Section 4.4 report. The cost falls
+% instead on the sanctioner, whose call is turn-ending and therefore
+% forfeits that round's allocation (recorded as action "neither").
+% The citation is retained as inspiration and the mechanical
+% difference is now stated where the factor is defined, so the
+% symbolic-sanctioning finding is not read as a failed replication of
+% costly punishment.
+%
+% REVISION V4 (o) Internal consistency, the definition of C
+% (Section 5). Section 3.2 states deliberately that the prosocial-
+% action rates are not called "compliance", and that the trust game's
+% referral rate is a lower bound on persona-consistency rather than a
+% direct measure of it. The Discussion's formalisation nonetheless
+% defined C as "conformity to a fairness norm ... measured here by its
+% prosocial-action rate", which reinstates exactly the reading Methods
+% declines and would let a reviewer play the paper's own caution
+% against its formalisation. C is now stated as an agent-level
+% behavioural guarantee approximated by the observed rate, with the
+% lower-bound caveat and a cross-reference to Section 3.2. The term
+% "conformity" is retained, since it carries the link to the
+% regulatory argument (single-system conformity regime, legal
+% conformity assessment) elsewhere in the same section; the change is
+% to what the rate is claimed to establish, not to the vocabulary.
+%
+% REVISION V4 (p) Corresponding-author address (title block). The v3
+% source displayed andreas.holzinger@human-centered.ai while the
+% mailto target resolved to andreas.holzinger@medunigraz.at, so a
+% reader clicking the link and a reader copying the text would have
+% reached different addresses. Both are now set to
+% andreas.holzinger@human-centered.ai per the corresponding author.
+% This closes the last AUTHOR CHECK in either file.

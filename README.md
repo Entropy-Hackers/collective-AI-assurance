@@ -2,26 +2,36 @@
 
 Companion repository for the study, providing its code and data.
 
+Heimo Müller<sup>1,2</sup>, Markus Plass<sup>1</sup>, Andreas
+Holzinger<sup>1,3,4</sup>
+
+<sup>1</sup>Medical University of Graz, Graz, Austria.
+<sup>2</sup>Human-Mind-Machine Corporation, Graz, Austria.
+<sup>3</sup>BOKU University Vienna, Vienna, Austria.
+<sup>4</sup>Graz University of Technology, Graz, Austria.
+
 ## Abstract
 
 > AI governance increasingly targets coordination between agents
 > rather than agents in isolation, but which feature of an interacting
-> population produces a collective outcome is untested. We varied
-> agent disposition, topology, interaction mechanic, and peer
-> sanctioning factorially across 264 runs of two multi-agent games,
-> with matched non-LLM baselines and four model families. Structural
-> and behavioural causes prove separable: a non-reasoning bot exactly
-> reproduces the public-goods game's degree–payoff relationship, while
-> in the trust game agents generate significantly more degree-linked
-> inequality than a minimal reciprocal rule. Neither prosociality nor
-> awareness prevents unequal outcomes: agents following an identical
-> fairness persona at rates from 84% to 100% produced near-identical
-> structural inequality, and articulating one's own position conferred
-> no payoff advantage. Most consequentially, whether disposition or
-> topology explains the outcome inverts between environments, driven
-> by the mechanic alone. Collective assurance therefore cannot be
-> assigned to a fixed level of the system: its appropriate target
-> depends on the causal structure of the interaction mechanism.
+> population produces a collective outcome has not been experimentally
+> decomposed. We varied agent disposition, topology, interaction
+> mechanic and peer sanctioning factorially across 264 runs of two
+> multi-agent games, with matched non-LLM baselines and four model
+> families. Structural and behavioural causes prove separable: a
+> non-reasoning bot reproduces the public-goods game's degree–payoff
+> relationship almost exactly, while in the trust game agents generate
+> significantly more degree-linked inequality than a minimal
+> reciprocal rule. Neither prosociality nor awareness prevented
+> unequal outcomes here: agents following an identical fairness
+> persona at rates from 84% to 100% across model families produced
+> near-identical degree-linked inequality, and articulating one's own
+> position conferred no payoff advantage. Most consequentially,
+> whether disposition or topology explains the outcome inverts between
+> the two interaction regimes, with model, personas and topologies
+> held identical. Collective assurance therefore cannot generally be
+> assigned to a fixed level of the system: the appropriate assurance
+> target depends on the interaction regime and its causal structure.
 
 The manuscript and its supplementary information (`manuscript.tex`,
 `supplement.tex`) document the full experimental design, statistical
@@ -30,13 +40,18 @@ data and code for independent verification.
 
 ## Contents
 
-- `manuscript.tex` / `.pdf` — manuscript.
+- `manuscript.tex` / `.pdf`, `references.bib` — the manuscript and its
+  bibliography (natbib/plainnat).
 - `supplement.tex` / `.pdf` — supplementary information: agent
   personas, round prompts, tool schema, non-LLM baseline strategies,
   self-report classification pipeline, network topology generation,
   and model/API configuration.
-- `figures/` — network topology and referral-pattern diagrams (source
-  and rendered).
+- `figures/` — `topology_structural.pdf` (the two non-trivial network
+  topologies), `referral_dynamics.pdf` (round-binned referral-network
+  similarity, scale-free vs. clustered), `emergence_over_rounds.pdf`
+  (Gini and degree–payoff correlation trajectories over rounds),
+  `degree_payoff_scatter.pdf` (degree vs. cumulative payoff per
+  condition).
 - `results_data.csv` / `results_summary.md` — main-study results:
   degree–payoff correlation, Gini coefficient, compliance rate, and
   sanctioning statistics, per experimental condition.
@@ -98,5 +113,7 @@ python3 stats_main_study.py h3 --out h3_equivalence.md
 python3 cochran_q_heterogeneity.py
 ```
 
-Both `.tex` files are self-contained (embedded bibliography) and
-compile with a standard two-pass `pdflatex` run.
+`manuscript.tex` cites an external `references.bib` (natbib/plainnat):
+compile with `pdflatex`, `bibtex manuscript`, then `pdflatex` twice
+more. `supplement.tex` has no bibliography and needs only a plain
+two-pass `pdflatex` run.
